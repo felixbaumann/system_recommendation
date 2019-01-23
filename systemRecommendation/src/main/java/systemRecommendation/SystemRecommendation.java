@@ -28,7 +28,6 @@ package systemRecommendation;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /* This is the main class dealing with the recommendation of a system
@@ -95,11 +94,6 @@ public class SystemRecommendation
 		double sizeParameter = 0.33333;
 		double frequencyParameter = 0.33333;
 
-		/* DEBUG Print arguments. */
-		// System.out.println("\n" + systemsFile);
-		// System.out.println(siegfriedOutputs);
-		// System.out.println(siegfriedOutputForDisk);
-		
 		/* If values for those parameters are given,
 		 * obviously use the given ones instead. */
 		if (args.length == 6)
@@ -107,18 +101,13 @@ public class SystemRecommendation
 			duplicateParameter = Double.parseDouble(args[3]);
 			sizeParameter = Double.parseDouble(args[4]);
 			frequencyParameter = Double.parseDouble(args[5]);
-			
-			/* DEBUG Print arguments. */
-			// System.out.println("\nDuplicate parameter:  " + args[3]);
-			// System.out.println("Size parameter:       " + args[4]);
-			// System.out.println("Frequency parameter:  " + args[5] + "\n");
 		}
-		
+
 		SystemStatistics systemStats = createSystemStats(systemsFile);
 		PronomStatistics pronomStats = createPronomStats(siegfriedOutputs);
 
 		/* Get the content on the disk. */
-		ArrayList<SiegfriedFile> disk
+		Disk disk
 		    = ExtractSiegfriedData.extractSiegfriedDataFromFile(
 		    	siegfriedOutputForDisk);
 
@@ -127,18 +116,18 @@ public class SystemRecommendation
 		    = PronomRelevance.relativePronomRelevances(
 		    	disk, pronomStats, duplicateParameter, sizeParameter,
 		    	frequencyParameter);
-		
+
 		/* Recommend a system maximizing the relevance.
 		 * The third argument is the number of the default system. */
 		chosenSystem = SystemChoice.chooseSystem(systemStats.systems,
 			relevances, 0);
-		
+
 		/* Inform about the id of the recommended system.
 		 * Note that the ids start with 0, therefore id+1 is the line in
 		 * the systems file representing the chosen system. */
 		System.out.println(chosenSystem);
 	}
-	
+
 	/* This function creates system statistics from a given file containing
 	 * system representations.
 	 */
@@ -157,11 +146,11 @@ public class SystemRecommendation
 		}
 		return systemStats;
 	}
-	
+
 	/* This function creates pronom statistics from a given directory of files
 	 * with Siegfried output.
 	 */
-	private static PronomStatistics createPronomStats(String path)
+	public static PronomStatistics createPronomStats(String path)
 		throws IOException
 	{
 		PronomStatistics pronomStats;

@@ -60,19 +60,21 @@ public class PronomStatistics
 	/* This method calculates pronom statistics for a given directory. */
     private void analyzeDirectory(String directory) throws IOException
     {
-    	ArrayList<ArrayList<SiegfriedFile>> images
-    	    = ExtractSiegfriedData.extractPronoms(directory);
+    	ArrayList<Disk> diskImages
+    		= ExtractSiegfriedData.extractPronoms(directory);
 
     	/* Count pronom frequencies. */  	
-    	for (int image = 0; image < images.size(); image++)
+    	for (int image = 0; image < diskImages.size(); image++)
     	{
-    		//numberOfFiles += result.get(iso).size();
-    		for (int file = 0; file < images.get(image).size(); file++)
+    		for (int file = 0; file < diskImages.get(image).files.length;
+    			file++)
     		{  			
     			for (int match = 0;
-    				match < images.get(image).get(file).matchCount(); match++)
+    				match < diskImages.get(image).files[file].matchCount();
+    				match++)
     			{
-    				String pronom = images.get(image).get(file).get(match);
+    				String pronom
+    					= diskImages.get(image).files[file].get(match);
     				if (pronom != "UNKNOWN")
     				{
     			        numberOfMatches ++;

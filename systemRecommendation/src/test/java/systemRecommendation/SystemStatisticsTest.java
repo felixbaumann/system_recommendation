@@ -81,12 +81,11 @@ public class SystemStatisticsTest {
 		assertEquals(systems4.systems.size(), 1);
 	}
 	
-	public static void test2()
+	public static void test2(String directory)
 	{
-		String directory = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\testSystems\\\\test01.txt";
+		directory += "testSystems\\\\test01.txt";
 		Path path = Paths.get(directory);
-		
+
 		try
 		{
 		    SystemStatistics systems0 = new SystemStatistics(path);
@@ -97,7 +96,5 @@ public class SystemStatisticsTest {
 		{
 			/* File doesn't exist or access denied. */
 		}
-		
-		
 	}
 }

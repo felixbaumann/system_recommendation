@@ -63,19 +63,19 @@ public class SystemChoice
 		/* No systems or pronoms cases. */
 		if (systems == null) { return -1; }
 		if (systems.size() == 0) {return -1; }
-		
+
 		if (pronoms == null) { return defaultSystem; }
 		if (pronoms.size() == 0) {return defaultSystem; }
-		
+
 		/* ID of the best system and its score found yet */
 		int bestSystemSoFar = 0;
 		double bestScoreSoFar = 0;
-		
+
 		/* Find the system with largest score. */
 		for (int sys = 0; sys < systems.size(); sys++)
 		{
 			double currentScore = systemScore(systems.get(sys), pronoms);
-			
+
 			if (currentScore > bestScoreSoFar)
 			{
 				bestSystemSoFar = sys;
@@ -85,7 +85,7 @@ public class SystemChoice
 
 		return (bestScoreSoFar > 0 ? bestSystemSoFar : defaultSystem);
 	}
-	
+
 	/* This function calculates the score of a system
 	 * by summing up the relevances of all the pronoms it can read.
 	 * 
@@ -100,7 +100,7 @@ public class SystemChoice
 									  HashMap<String, Double> pronoms)
 	{
 		double systemScore = 0;
-		
+
 		Iterator<String> iter = pronoms.keySet().iterator();
 		while(iter.hasNext())
 		{

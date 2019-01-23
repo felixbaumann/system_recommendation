@@ -33,10 +33,10 @@ import java.io.IOException;
 public class PronomStatisticsTest {
 	
 	
-	public static void testPronomStatistics() throws IOException
+	public static void testPronomStatistics(String directory)
+		throws IOException
 	{
-		String directory1 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\unitTests\\\\01Test\\\\";
+		String directory1 = directory + "partialSiegfriedData\\\\01Test\\\\";
 		PronomStatistics stats1 = new PronomStatistics(directory1);
 
 		assertEquals(10, stats1.generalRelativeFrequency.size());
@@ -72,15 +72,13 @@ public class PronomStatisticsTest {
 				0.0259, 0.001);	
 		
 
-        String directory2 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\unitTests\\\\02Test\\\\";
+        String directory2 = directory + "partialSiegfriedData\\\\02Test\\\\";
 		PronomStatistics stats2 = new PronomStatistics(directory2);
 
 		assertEquals(0, stats2.generalRelativeFrequency.size());
 
 
-		String directory3 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\unitTests\\\\03Test\\\\";
+		String directory3 = directory + "partialSiegfriedData\\\\03Test\\\\";
 		PronomStatistics stats3 = new PronomStatistics(directory3);
 		
         assertEqualDoubles(stats3.generalRelativeFrequency.get("fmt/212"),
@@ -96,8 +94,7 @@ public class PronomStatisticsTest {
 		           0.4, 0.001);
 
 
-		String directory4 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\unitTests\\\\04Test\\\\";
+		String directory4 = directory + "partialSiegfriedData\\\\04Test\\\\";
 		PronomStatistics stats4 = new PronomStatistics(directory4);
 		
 		assertEquals(3, stats4.generalRelativeFrequency.size());

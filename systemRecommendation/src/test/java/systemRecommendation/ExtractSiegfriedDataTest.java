@@ -33,27 +33,27 @@ import java.util.ArrayList;
 
 public class ExtractSiegfriedDataTest {
 
-	public static void testExtractPronoms() throws IOException
+	public static void testExtractPronoms(String directory) throws IOException
 	{
-		String directory = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\unitTests\\\\01Test\\\\";
+		directory += "partialSiegfriedData\\\\01Test\\\\";
 
-		ArrayList<ArrayList<SiegfriedFile>> result
+		ArrayList<Disk> result
 		    = ExtractSiegfriedData.extractPronoms(directory);
 
 		if (result.size() == 3)
 		{
 			/* 1.ISO */
-			assertEquals(result.get(0).get(0).get(0), "fmt/18");
+			assertEquals(result.get(0).files[0].get(0), "fmt/18");
 	
 			/* 3.ISO */
-			assertEquals(result.get(2).get(0).get(0), "fmt/212");
+			assertEquals(result.get(2).files[0].get(0), "fmt/212");
 		}		
 	}
 
 	public static void testExtractSiegfriedData()
 	{
-		/* An invalid JSON string shall throw a JSONException, nothing else. */
+		/* An invalid JSON string shall throw a JSONException,
+		 * nothing else. */
 		boolean exception = false;
 		try 
 		{
@@ -66,33 +66,37 @@ public class ExtractSiegfriedDataTest {
 		assertTrue(exception);
 
 		/* Extract from empty JSON object. */
-		assertTrue(ExtractSiegfriedData.extractSiegfriedDataFromString("{}").size() == 0);
+		assertTrue(ExtractSiegfriedData.extractSiegfriedDataFromString(
+			"{}").files.length == 0);
 
-		/* Extract from JSON object with two files and two matches for one of those. */
-		String json = "{\"files\":[{\"matches\":[{\"id\":\"fmt/18\"}, {\"id\":\"fmt/19\"}]}, {\"matches\":[{\"id\":\"fmt/18\"}]}]}";
-		ArrayList<SiegfriedFile> pronoms = ExtractSiegfriedData.extractSiegfriedDataFromString(json);
+		/* Extract from JSON object with two files and two matches
+		 * for one of those. */
+		String json = "{\"files\":[{\"matches\":[{\"id\":\"fmt/18\"}, "
+			+ "{\"id\":\"fmt/19\"}]}, {\"matches\":[{\"id\":\"fmt/18\"}]}]}";
+		Disk pronoms
+			= ExtractSiegfriedData.extractSiegfriedDataFromString(json);
 		
-		assertTrue(pronoms.size() == 2);
-		assertTrue(pronoms.get(0).matchCount() == 2);
-		assertTrue(pronoms.get(1).matchCount() == 1);
-		assertEquals("fmt/18", pronoms.get(0).get(0));
-		assertEquals("fmt/19", pronoms.get(0).get(1));
-		assertEquals("fmt/18", pronoms.get(1).get(0));
+		assertTrue(pronoms.files.length == 2);
+		assertTrue(pronoms.files[0].matchCount() == 2);
+		assertTrue(pronoms.files[1].matchCount() == 1);
+		assertEquals("fmt/18", pronoms.files[0].get(0));
+		assertEquals("fmt/19", pronoms.files[0].get(1));
+		assertEquals("fmt/18", pronoms.files[1].get(0));
 	
 	}
 
-	public static void testExtractSiegfriedDataFromFile() throws IOException
+	public static void testExtractSiegfriedDataFromFile(String directory)
+		throws IOException
 	{
-    	String path = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-    			    + "arbeit\\\\sfdata\\\\unitTests\\\\1.ISO";
+    	String path = directory + "partialSiegfriedData\\\\01Test\\\\1.ISO";
     	try
     	{
-    	    ArrayList<SiegfriedFile> pronoms
-    	    = ExtractSiegfriedData.extractSiegfriedDataFromFile(path);
-    	    assertTrue(pronoms.size() == 3);
-    	    assertEquals("fmt/18", pronoms.get(0).get(0));
-    	    assertEquals("fmt/18", pronoms.get(1).get(0));
-    	    assertEquals("fmt/18", pronoms.get(2).get(0));
+    	    Disk pronoms
+    	        = ExtractSiegfriedData.extractSiegfriedDataFromFile(path);
+    	    assertTrue(pronoms.files.length == 3);
+    	    assertEquals("fmt/18", pronoms.files[0].get(0));
+    	    assertEquals("fmt/18", pronoms.files[1].get(0));
+    	    assertEquals("fmt/18", pronoms.files[2].get(0));
     	}
     	catch(java.nio.file.NoSuchFileException e)
     	{

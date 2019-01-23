@@ -27,9 +27,6 @@
 package systemRecommendation;
 
 import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.Iterator;
-//import org.javatuples.Pair;
 import org.json.*;
 
 import java.io.File;
@@ -59,19 +56,18 @@ public class ExtractSiegfriedData
      * 				first one with three files, second one with only one file.
      * 				All files got only one match whose pronom is fmt/18
      */
-    public static ArrayList<ArrayList<SiegfriedFile>> extractPronoms(
+    public static ArrayList<Disk> extractPronoms(
     	String directory) throws IOException
     {
     	/* 1. Get all files in the directoy. */
     	File folder = new File(directory);
     	File[] files = folder.listFiles() ;
     	
+    	if (files == null) { return new ArrayList<Disk>(); }
+    	
     	/* 2. Extract Siegfried data from each file. */
-    	ArrayList<ArrayList<SiegfriedFile>> result
-    	    = new ArrayList<ArrayList<SiegfriedFile>>();
-    	
-    	if (files == null) { return result; }
-    	
+    	ArrayList<Disk> result = new ArrayList<Disk>();
+
     	/* For each file in the given directory... */
     	for (int index = 0; index < files.length; index++)
     	{
@@ -96,7 +92,8 @@ public class ExtractSiegfriedData
      * 
      * PATH		the path to the file containing the Siegfried-output
      * 
-     * RETURNS	a list of Siegfried files, for the given Siegfried output.
+     * RETURNS	a disk containing a list of Siegfried files, for the given 
+     * 			Siegfried output.
      * 			Each Siegfried file contains guesses for pronoms for the file
      * 			as well as the size of the file.
      * 
@@ -105,11 +102,10 @@ public class ExtractSiegfriedData
      * 				object.
      * 
      */
-    public static ArrayList<SiegfriedFile> 
-        extractSiegfriedDataFromFile(String path)
-        	throws IOException, org.json.JSONException
+    public static Disk  extractSiegfriedDataFromFile(String path)
+        throws IOException, org.json.JSONException
     {
-    	/* 1. Read the given file and store it's content as a string. */
+    	/* 1. Read the given file and store its content as a string. */
    	    String siegfriedJSON
    	        = new String(Files.readAllBytes(Paths.get(path)));
     	
@@ -123,13 +119,13 @@ public class ExtractSiegfriedData
 	 * 
 	 * SIEGFRIEDJSON	the Siegfried output in JSON
 	 * 
-	 * RETURNS			the pronoms from the given Siegfried output
+	 * RETURNS			the pronoms from the given Siegfried output stored in
+	 * 					the files-list of a Disk object
 	 * 
 	 * EXCEPTION		if the input string isn't in proper JSON
 	 */
-	public static ArrayList<SiegfriedFile> 
-	    extractSiegfriedDataFromString(String siegfriedJSON)
-	    	throws org.json.JSONException
+	public static Disk extractSiegfriedDataFromString(String siegfriedJSON)
+	    throws org.json.JSONException
 	{
 		/* Transform the Siegfried output into an accessible JSON object */
 		JSONObject object = new JSONObject(siegfriedJSON);
@@ -144,32 +140,35 @@ public class ExtractSiegfriedData
 	/* This function extracts the pronoms of all listed files
 	 * in the JSON output of Siegfried.
 	 * 
-	 * It returns a list with each entry representing a file,
-	 * containing a list of all possible matches as well as the filesize.
+	 * It returns a Disk object containing a files-list,
+	 * where each file contains a list of all possible matches as well as
+	 * the filesize.
 	 * Usually, there just seems to be a single match or none at all.
 	 * Those matches are given as string of their pronoms.
 	 * 
 	 * OBJECT	the JSONObject to extract data from
 	 * 
 	 */
-	private static ArrayList<SiegfriedFile> extractInfoFromSiegfried
-	(JSONObject object)
+	private static Disk extractInfoFromSiegfried (JSONObject object)
 	{
-		/* Create a list for each file containing a list for each match. */
-		ArrayList<SiegfriedFile> result = new ArrayList<SiegfriedFile>();
-
         /* Check whether the object and it's file list actually exist. */
-        if (listNotExistent(object, "files")) { return result; }
+        if (listNotExistent(object, "files"))
+        {
+        	return new Disk(new SiegfriedFile[] {});
+        }
 
 		/* Consider all files in the Siegfried output. */
         int fileCount = object.getJSONArray("files").length();
+        
+		/* Create a disk with a list for each file,
+		 * which again contains a list for each match. */
+		Disk result = new Disk(new SiegfriedFile[fileCount]);
 
 		for (int file = 0; file < fileCount; file++)
 		{
 			/* Create a list for all matches of the current file. */
-			result.add(
-				extractInfoOfSingleFile(
-					object.getJSONArray("files").getJSONObject(file)));
+			result.files[file] = extractInfoOfSingleFile(
+				object.getJSONArray("files").getJSONObject(file));
 		}
 		return result;
 	}
@@ -183,16 +182,15 @@ public class ExtractSiegfriedData
 	{
 		/*1. Get the file size. Note that if unknown it will be set to -1. */
 		SiegfriedFile result = new SiegfriedFile(getFileSize(file));
-		
-		
+
 		/* 2. Get the pronom matches. */
-		
+
 		/* Check whether the file and it's match list actually exist. */
 		if (listNotExistent(file, "matches")) { return result; }
-		
+
 		/* Consider each match for each file. */
 		int matchCount = file.getJSONArray("matches").length();
-		
+
 		for (int match = 0; match < matchCount; match++)
 		{
 			/* Check whether the match and it's id entry actually exist. */

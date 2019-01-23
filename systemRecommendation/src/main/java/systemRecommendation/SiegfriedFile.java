@@ -28,9 +28,7 @@ package systemRecommendation;
 
 import java.util.ArrayList;
 
-/* Represents a single file within a Siegfried output.
- * 
- */
+/* Represents a single file within a Siegfried output. */
 public class SiegfriedFile {
 
 	/* Simple file size. */
@@ -42,6 +40,17 @@ public class SiegfriedFile {
 	public SiegfriedFile(int fileSize)
 	{
 		size = (fileSize >= 0 ? fileSize : -1);
+	}
+	
+	/* Constructor where some matches are already known. */
+	public SiegfriedFile(int fileSize, String pronomMatches[])
+	{
+		size = (fileSize >= 0 ? fileSize : -1);
+		if (pronomMatches == null) {return; }
+		for (int pronom = 0; pronom < pronomMatches.length; pronom++)
+		{
+			addMatch(pronomMatches[pronom]);
+		}
 	}
 	
 	/* Add a match to the list of matches for this file. */

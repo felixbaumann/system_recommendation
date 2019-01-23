@@ -60,8 +60,7 @@ public class SystemImage {
 	    = new HashMap<String, HashSet<String>>();
 	private static HashMap<String, HashSet<String>> programWrites
 	    = new HashMap<String, HashSet<String>>();
-	
-	
+
 	/* The pronoms of all file formats that can be read or written
 	 * by the system or by programs installed on the system. */
 	private HashSet<String> readablePronoms;
@@ -80,7 +79,7 @@ public class SystemImage {
 		writablePronoms 
 		    = (writesPronoms != null ? writesPronoms : new HashSet<String>());
 	}
-	
+
 	/* Constructor for a system image representing a system environment.
 	 * 
 	 * Secondary constructor (much less efficient).
@@ -98,7 +97,7 @@ public class SystemImage {
 		while (iter.hasNext())
 		{
 			String current = iter.next();
-			
+
 			/* If the current program never occured before in any other
 			 * system, we first have to access wikidata and fetch
 			 * the pronoms.
@@ -107,7 +106,7 @@ public class SystemImage {
 			{
 				getPronomsFromWikidata(current);
 			}
-			
+
 			/* Now the pronoms for the current program
 			 * are definitely in the archive, so a simple lookup
 			 * is enough work to add them to the current system.
@@ -128,7 +127,7 @@ public class SystemImage {
 		readablePronoms.addAll(programReads.get(programQID));
 		writablePronoms.addAll(programWrites.get(programQID));
 	}
-	
+
 	/* This function fetches the pronoms of the readable and writable
 	 * file formats of a program given by it's wikidata QID and adds those
 	 * pronoms to the local archive of pronoms of the current program.
@@ -149,7 +148,7 @@ public class SystemImage {
 
 
 		/* Get the readable pronoms. */
-		
+
 		/* Query for pronoms of readable formats of the given program. */
 		String query = "SELECT ?item ?itemlabel"
 				     + "WHERE"
@@ -157,13 +156,13 @@ public class SystemImage {
 				     + "wd:" + programQID + " wdt:P1072 ?format ."
 				     + "?format wdt:P2748 ?item" 
 				     + "}";	
-		
+
 		/* Fetch the actual query results. */
 		TupleQuery tupleQuery
 		    = sparqlConnection.prepareTupleQuery(QueryLanguage.SPARQL, query);
-		
+
 		String result = null;
-		
+
 		/* Initialize the set of readable formats of this program. */
 		programReads.put(programQID, new HashSet<String>());
 
@@ -177,11 +176,10 @@ public class SystemImage {
 		    	programReads.get(programQID).add(result.substring(7, result.length() - 2));
 		    }
 		}
-		
-	
+
 
 		/* Get the writable pronoms. */
-		
+
 		/* Adjust the query to "writable". */
 		query = "SELECT ?item ?itemlabel"
 			+ "WHERE"
@@ -189,7 +187,7 @@ public class SystemImage {
 			+ "wd:" + programQID + " wdt:P1073 ?format ."
 			+ "?format wdt:P2748 ?item" 
 			+ "}";
-		
+
 		/* Fetch the new query results. */
 		tupleQuery = sparqlConnection.prepareTupleQuery(QueryLanguage.SPARQL, query);
 
@@ -199,90 +197,41 @@ public class SystemImage {
 		/* Transform the result into strings and add the pronom to the set. */
 		for (BindingSet bs : QueryResults.asList(tupleQuery.evaluate())) {
 		    result = bs.toString();
-		    
+
 		    if (result != null)
 		    {
 		    	programWrites.get(programQID).add(result.substring(7, result.length() - 2));
 		    }
 		}
-		
-	}
-	
-	/* 
-	private void addPronomsFromProgram(String programQID)
-	{
-		try
-		{
-		    ArrayList<String> readable = WikidataAccess.getWikidataStatementTargets(programQID, "P1072");
-		    for (int i = 0; i < readable.size(); i++)
-		    {
-		    	try
-		    	{
-		    		ArrayList<String> pronoms = WikidataAccess.getWikidataStatementTargets(readable.get(i), "P2748");
-		    		for (int k = 0; k < pronoms.size(); k++)
-		    		{
-		    			readablePronoms.add(pronoms.get(k));
-		    		}
-		    		
-		    	}
-		    	catch(MediaWikiApiErrorException e) { }
-				catch(WikidataInvalidIDException e) { }
-		    }
-		}
-		catch(MediaWikiApiErrorException e) { }
-		catch(WikidataInvalidIDException e) { }
-		try
-		{
-		    ArrayList<String> writable = WikidataAccess.getWikidataStatementTargets(programQID, "P1073");
-		    for (int i = 0; i < writable.size(); i++)
-		    {
-		    	try
-		    	{
-		    		ArrayList<String> pronoms = WikidataAccess.getWikidataStatementTargets(writable.get(i), "P2748");
-		    		for (int k = 0; k < pronoms.size(); k++)
-		    		{
-		    			writablePronoms.add(pronoms.get(k));
-		    		}
-		    		
-		    	}
-		    	catch(MediaWikiApiErrorException e) { }
-				catch(WikidataInvalidIDException e) { }
-		    }
-		}
-		catch(MediaWikiApiErrorException e) { }
-		catch(WikidataInvalidIDException e) { }    		
 	}
 
-	*/
-	
 	/* Return the set of pronoms this system can read. */
 	public HashSet<String> readablePronoms()
 	{
 		return readablePronoms;
 	}
-	
+
 	/* Return the set of pronoms this system can write. */
 	public HashSet<String> writablePronoms()
 	{
 		return writablePronoms;
 	}
-	
+
 	/* Checks whether the given pronom is readable by the system. */
 	public boolean readable(String pronom)
 	{
 		return readablePronoms.contains(pronom);
 	}
-	
+
 	/* Checks whether the given pronom is writable by the system. */
 	public boolean writable(String pronom)
 	{
 		return writablePronoms.contains(pronom);
 	}
-	
+
 	/* ID getter */
 	public int id()
 	{
 		return systemID;
 	}
-
 }

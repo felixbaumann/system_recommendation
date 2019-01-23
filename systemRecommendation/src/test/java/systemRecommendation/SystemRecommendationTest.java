@@ -32,16 +32,13 @@ import java.io.IOException;
 
 public class SystemRecommendationTest {
 	
-	public static void localTest() throws IOException
+	public static void localTest(String directory) throws IOException
 	{
-		String systems2 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelorarbeit"
-			+ "\\\\testSystems\\\\test02.txt";
+		String systems2 = directory + "testSystems\\\\test02.txt";
 		
-		String pronomStat = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelorarbeit"
-			+ "\\\\sfdata\\\\sfdata (last 12 are formatted)\\\\";
+		String pronomStat = directory + "siegfriedData\\\\";
 		
-		String disk1 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelorarbeit\\\\sfdata"
-		+ "\\\\sfdata (last 12 are formatted)\\\\39002105324017.ISO";
+		String disk1 = directory + "siegfriedData\\\\39002105324017.ISO";
 		
 		String args6_1[] = {systems2, pronomStat, disk1, "0.4", "0.2", "0.4"};
 		String args6_2[] = {systems2, pronomStat, disk1, "1.0", "0.0", "0.0"};

@@ -36,6 +36,10 @@ public class AllTest {
  * if the local directories with test data don't exist. */
 private boolean directoriesExist = false;
 
+/* Default directory for test data. */
+private static String directory
+    = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelorarbeit\\\\testData\\\\";
+
 	@Test
 	public void runAllTests() throws IOException
 	{
@@ -48,12 +52,12 @@ private boolean directoriesExist = false;
 		/* Tests requiring certain test files in certain directories. */
 		if (directoriesExist)
 		{
-			ExtractSiegfriedDataTest.testExtractPronoms();
-			ExtractSiegfriedDataTest.testExtractSiegfriedDataFromFile();
-			PronomRelevanceTest.test();
-			PronomStatisticsTest.testPronomStatistics();
-			SystemStatisticsTest.test2();
-			SystemRecommendationTest.localTest();
+			ExtractSiegfriedDataTest.testExtractPronoms(directory);
+			ExtractSiegfriedDataTest.testExtractSiegfriedDataFromFile(directory);
+			PronomRelevanceTest.test(directory);
+			PronomStatisticsTest.testPronomStatistics(directory);
+			SystemStatisticsTest.test2(directory);
+			SystemRecommendationTest.localTest(directory);
 		}
 	}
 }

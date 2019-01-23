@@ -47,7 +47,6 @@ import java.util.List;
  */
 public class SystemStatistics
 {
-
 	/* This list contains all the system images in the correct order
 	 * according to their occurence and their ID.
 	 */
@@ -60,21 +59,21 @@ public class SystemStatistics
 	 */
 	public HashMap<String, Integer> readingSystems;
 	public HashMap<String, Integer> writingSystems;
-	
+
 	/* Returns the number of systems able to read a given pronom.*/
 	public Integer numberOfReadingSystems(String pronom)
 	{
 		return (readingSystems.get(pronom) == null ?
 				0 : readingSystems.get(pronom));
 	}
-	
+
 	/* Returns the number of systems able to write a given pronom.*/
 	public Integer numberOfWritingSystems(String pronom)
 	{
 		return (writingSystems.get(pronom) == null ?
 				0 : writingSystems.get(pronom));
 	}
-	
+
 	/* Constructor if the systems are given as string.
 	 * 
 	 * SOURCE	the systems divided by semicolons.
@@ -88,7 +87,7 @@ public class SystemStatistics
 		readingSystems = calculatePronomCommonness(true);
 		writingSystems = calculatePronomCommonness(false);
 	}
-	
+
 	/* Constructor if the systems are given by the path to a file.
 	 * 
 	 * SOURCE	the path to the file.
@@ -103,7 +102,7 @@ public class SystemStatistics
 		readingSystems = calculatePronomCommonness(true);
 		writingSystems = calculatePronomCommonness(false);
 	}
-	
+
 	/* This function reads an archive of system environments from a string.
 	 * Each part of the string shall represent a system environment,
 	 * divided by a semicolon.
@@ -122,7 +121,7 @@ public class SystemStatistics
 	{			
 		return extractPrograms(Arrays.asList(string.split(";")));
 	}
-	
+
 	/* This function reads an archive of system environments from a file.
 	 * Each line in the file shall represent a system environment.
 	 * Each line consists of the QIDs of the programs installed on the system.

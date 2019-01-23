@@ -27,33 +27,27 @@
 package systemRecommendation;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class PronomRelevanceTest {
 
-	public static void test() throws IOException
+	public static void test(String directory) throws IOException
 	{
 		/* Create some pronom statistics. */
-		String directory1 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\unitTests\\\\01Test\\\\";
+		String directory1 = directory + "partialSiegfriedData\\\\01Test\\\\";
 		PronomStatistics stats1 = new PronomStatistics(directory1);
 		
-		String directory2 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\unitTests\\\\02Test\\\\";
+		String directory2 = directory + "partialSiegfriedData\\\\02Test\\\\";
 		PronomStatistics stats2 = new PronomStatistics(directory2);
 		
-		String directory3 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\unitTests\\\\03Test\\\\";
+		String directory3 = directory + "partialSiegfriedData\\\\03Test\\\\";
 		PronomStatistics stats3 = new PronomStatistics(directory3);
 		
-		String directory4 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\unitTests\\\\04Test\\\\";
+		String directory4 = directory + "partialSiegfriedData\\\\04Test\\\\";
 		PronomStatistics stats4 = new PronomStatistics(directory4);
 
-		String directory5 = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelor"
-			    + "arbeit\\\\sfdata\\\\sfdata (last 12 are formatted)\\\\";
+		String directory5 = directory + "siegfriedData\\\\";
 		PronomStatistics stats5 = new PronomStatistics(directory5);
 
 
@@ -163,121 +157,45 @@ public class PronomRelevanceTest {
 
 
         /* Create some disks containing files. */
-        ArrayList<SiegfriedFile> disk1 = new ArrayList<SiegfriedFile>();
-        
-        ArrayList<SiegfriedFile> disk2 = new ArrayList<SiegfriedFile>();
-        disk2.add(file1);
-        
-        ArrayList<SiegfriedFile> disk3 = new ArrayList<SiegfriedFile>();
-        disk3.add(file1);
-        disk3.add(file2);
-        
-        ArrayList<SiegfriedFile> disk4 = new ArrayList<SiegfriedFile>();
-        disk4.add(file1);
-        disk4.add(file2);
-        disk4.add(file3);
-        
-        ArrayList<SiegfriedFile> disk5 = new ArrayList<SiegfriedFile>();
-        disk5.add(file1);
-        disk5.add(file1);
-        disk5.add(file1);
-        disk5.add(file2);
-        disk5.add(file4);
-        disk5.add(file5);
-        disk5.add(file6);
-        disk5.add(file7);
-        disk5.add(file13);
-        
-        ArrayList<SiegfriedFile> disk6 = new ArrayList<SiegfriedFile>();
-        disk6.add(file0);
+        Disk disk1 = new Disk(new SiegfriedFile[] {});
+        Disk disk2 = new Disk(new SiegfriedFile[] {file1});
+        Disk disk3 = new Disk(new SiegfriedFile[] {file1, file2});       
+        Disk disk4 = new Disk(new SiegfriedFile[] {file1, file2, file3});
+        Disk disk5 = new Disk(new SiegfriedFile[] {file1, file1, file1,
+        	file2, file4, file5, file6, file7, file13});
 
-        ArrayList<SiegfriedFile> disk7 = new ArrayList<SiegfriedFile>();
-        disk7.add(file19);
-        disk7.add(file19);
-        disk7.add(file19);
-        disk7.add(file19);
-        disk7.add(file19);
-        disk7.add(file24);
-        disk7.add(file26);
+        Disk disk6 = new Disk(new SiegfriedFile[] {file0});
+        Disk disk7 = new Disk(new SiegfriedFile[] {file19, file19, file19,
+        	file19, file19, file24, file26});
 
-        ArrayList<SiegfriedFile> disk8 = new ArrayList<SiegfriedFile>();
-        disk8.add(file1);
-        disk8.add(file2);
-        disk8.add(file3);
-        disk8.add(file4);
-        disk8.add(file5);
-        disk8.add(file6);
-        disk8.add(file7);
-        disk8.add(file8);
-        disk8.add(file9);
-        disk8.add(file10);
-        disk8.add(file11);
-        disk8.add(file12);
-        disk8.add(file13);
-        disk8.add(file14);
-        disk8.add(file15);
-        disk8.add(file16);
-        disk8.add(file17);
-        disk8.add(file18);
-        disk8.add(file19);
-        disk8.add(file20);
-        disk8.add(file21);
-        disk8.add(file22);
-        disk8.add(file23);
-        disk8.add(file24);
-        disk8.add(file25);
-        disk8.add(file26);
-        
-        ArrayList<SiegfriedFile> disk9 = new ArrayList<SiegfriedFile>();
-        disk9.add(file21);
-        disk9.add(file21);
-        disk9.add(file7);
-        disk9.add(file9);
-        
-        ArrayList<SiegfriedFile> disk10 = new ArrayList<SiegfriedFile>();
-        disk10.add(file4);
-        disk10.add(file5);
-        disk10.add(file6);
-        disk10.add(file4);
-        disk10.add(file4);
-        disk10.add(file6);
-        
-        ArrayList<SiegfriedFile> disk11 = new ArrayList<SiegfriedFile>();
-        disk11.add(file24); // 12 MB exe
-        disk11.add(file12); // 1 GB pdf
-        
-        ArrayList<SiegfriedFile> disk12 = new ArrayList<SiegfriedFile>();
-        disk12.add(file4);
-        disk12.add(file4);
-        disk12.add(file9);
-        disk12.add(file9);
-        disk12.add(file4);
-        disk12.add(file19);
-        
-        ArrayList<SiegfriedFile> disk13 = new ArrayList<SiegfriedFile>();
-        disk13.add(file24);
-        disk13.add(file25);
-        
-        ArrayList<SiegfriedFile> disk14 = new ArrayList<SiegfriedFile>();
-        disk14.add(file6);
-        disk14.add(file6);
-        disk14.add(file7);
-        disk14.add(file12);
-        
-        ArrayList<SiegfriedFile> disk15 = new ArrayList<SiegfriedFile>();
-        disk15.add(file12); // 1 GB pdf
-        disk15.add(file12);
-        disk15.add(file12);
-        disk15.add(file13); // 1 GB exotic file
-        
-        ArrayList<SiegfriedFile> disk16 = new ArrayList<SiegfriedFile>();
-        disk16.add(file16);
-        disk16.add(file16);
-        disk16.add(file16);
-        disk16.add(file14);
-        disk16.add(file14);
+        Disk disk8 = new Disk(new SiegfriedFile[] {file1, file2, file3,
+            file4, file5, file6, file7, file8, file9, file10, file11, file12,
+            file13, file14, file15, file16, file17, file18, file19, file20,
+            file21, file22, file23, file24, file25, file26});
 
-        
+        Disk disk9 = new Disk(new SiegfriedFile[] {file21, file21, file7,
+        	file9});
+
+        Disk disk10 = new Disk(new SiegfriedFile[] {file4, file5, file6,
+            file4, file4, file6});
+
+        Disk disk11 = new Disk(new SiegfriedFile[] {file24, file12});
+
+        Disk disk12 = new Disk(new SiegfriedFile[] {file4, file4, file9,
+                file9, file4, file19});
+
+        Disk disk13 = new Disk(new SiegfriedFile[] {file24, file25}); 
+
+        Disk disk14 = new Disk(new SiegfriedFile[] {file6, file6, file7,
+            	file12});
+
+        Disk disk15 = new Disk(new SiegfriedFile[] {file12, file12, file12,
+            	file13});   
+
+        Disk disk16 = new Disk(new SiegfriedFile[] {file16, file16, file16,
+            	file14, file14});
+
+
         /* Use disk 1-16 for statistics 1-5 */
         System.out.println("\nDisk 1, stats 1-5\n");
         printRelevances(PronomRelevance.relativePronomRelevances(
@@ -471,8 +389,8 @@ public class PronomRelevanceTest {
         printRelevances(PronomRelevance.relativePronomRelevances(
         		disk16, stats5, 0.33333, 0.33333, 0.33333));
 	}
-	
-	
+
+
 	private static void printRelevances(HashMap<String, Double> relevances)
 	{
 		System.out.println("\nPronom       Relevance\n");
@@ -483,7 +401,5 @@ public class PronomRelevanceTest {
 			System.out.println(pronom + "    " + relevances.get(pronom));
 		}
 		System.out.println("\n");
-		
 	}
-	
 }
