@@ -69,13 +69,13 @@ public class ExtractSiegfriedData
     	ArrayList<Disk> result = new ArrayList<Disk>();
 
     	/* For each file in the given directory... */
-    	for (int index = 0; index < files.length; index++)
+    	for (File file : files)
     	{
     		/* Try to extract the pronoms from the Siegfried output. */
     		try 
     		{
     			result.add(extractSiegfriedDataFromFile(
-    				directory + files[index].getName()));
+    				directory + file.getName(), file.getName()));
     		}
     		/* File content is corrupted. Proceed with next file. */
     		catch(org.json.JSONException e)
@@ -102,7 +102,7 @@ public class ExtractSiegfriedData
      * 				object.
      * 
      */
-    public static Disk  extractSiegfriedDataFromFile(String path)
+    public static Disk  extractSiegfriedDataFromFile(String path, String diskName)
         throws IOException, org.json.JSONException
     {
     	/* 1. Read the given file and store its content as a string. */
@@ -110,7 +110,7 @@ public class ExtractSiegfriedData
    	        = new String(Files.readAllBytes(Paths.get(path)));
     	
     	/* 2. Use the function below to extract the data. */
-    	return extractSiegfriedDataFromString(siegfriedJSON);
+    	return extractSiegfriedDataFromString(siegfriedJSON, diskName);
     }
 	
 	
@@ -124,7 +124,7 @@ public class ExtractSiegfriedData
 	 * 
 	 * EXCEPTION		if the input string isn't in proper JSON
 	 */
-	public static Disk extractSiegfriedDataFromString(String siegfriedJSON)
+	public static Disk extractSiegfriedDataFromString(String siegfriedJSON, String diskName)
 	    throws org.json.JSONException
 	{
 		/* Transform the Siegfried output into an accessible JSON object */
@@ -133,7 +133,7 @@ public class ExtractSiegfriedData
 		/* Create a list that will store the pronoms of all files
 		 * of the given JSON.
 		 */
-		return extractInfoFromSiegfried(object);
+		return extractInfoFromSiegfried(object, diskName);
 	}
 	
 	
@@ -148,13 +148,15 @@ public class ExtractSiegfriedData
 	 * 
 	 * OBJECT	the JSONObject to extract data from
 	 * 
+	 * NAME		the name of the disk image
+	 * 
 	 */
-	private static Disk extractInfoFromSiegfried (JSONObject object)
+	private static Disk extractInfoFromSiegfried(JSONObject object, String diskName)
 	{
         /* Check whether the object and it's file list actually exist. */
         if (listNotExistent(object, "files"))
         {
-        	return new Disk(new SiegfriedFile[] {});
+        	return new Disk(new SiegfriedFile[] {}, diskName);
         }
 
 		/* Consider all files in the Siegfried output. */
@@ -162,7 +164,7 @@ public class ExtractSiegfriedData
         
 		/* Create a disk with a list for each file,
 		 * which again contains a list for each match. */
-		Disk result = new Disk(new SiegfriedFile[fileCount]);
+		Disk result = new Disk(new SiegfriedFile[fileCount], diskName);
 
 		for (int file = 0; file < fileCount; file++)
 		{
@@ -180,12 +182,15 @@ public class ExtractSiegfriedData
 	 */
 	private static SiegfriedFile extractInfoOfSingleFile(JSONObject file)
 	{
-		/*1. Get the file size. Note that if unknown it will be set to -1. */
-		SiegfriedFile result = new SiegfriedFile(getFileSize(file));
+		/*1. Create a file.
+		 * Get the file size. Note that if unknown it will be set to -1.
+		 * Get the file path. Note that if unknown it will be set to "". */
+		SiegfriedFile result
+		    = new SiegfriedFile(getFileSize(file), getFilePath(file));
 
 		/* 2. Get the pronom matches. */
 
-		/* Check whether the file and it's match list actually exist. */
+		/* Check whether the file and its match list actually exist. */
 		if (listNotExistent(file, "matches")) { return result; }
 
 		/* Consider each match for each file. */
@@ -193,19 +198,19 @@ public class ExtractSiegfriedData
 
 		for (int match = 0; match < matchCount; match++)
 		{
-			/* Check whether the match and it's id entry actually exist. */
+			/* Check whether the match and its id entry actually exist. */
 			if (stringNotExistent(file.getJSONArray("matches")
 					.getJSONObject(match), "id"))
 			{
 				/* If there's no pronom, store 'UNKNOWN' */
-				result.addMatch("UNKNOWN");
+				result.addMatch(new PronomMatch("UNKNOWN"));
 			}
 			else
 			{
 			/* Add the current match to the list of matches of
 			 * the current file. */
-			    result.addMatch(file.getJSONArray("matches")
-					.getJSONObject(match).getString("id"));
+			    result.addMatch(new PronomMatch(file.getJSONArray("matches")
+					.getJSONObject(match).getString("id")));
 			}
 		}
 		return result;
@@ -284,6 +289,30 @@ public class ExtractSiegfriedData
 		{
 			/* The object doesn't contain a file size.*/
 			return -1;
+		}
+	}
+	
+	/* This method simply extracts the string with the key "filename"
+	 * from the given JSON object.
+	 * This string is supposed to contain the path to the file
+	 * including its name.
+	 * If no such property exists, it will return "". 
+	 */
+	private static String getFilePath(JSONObject object)
+	{
+		try 
+		{
+			return object.getString("filename");
+		}
+		catch(java.lang.NullPointerException e)
+		{
+			/* No object was given. */
+			return "";
+		}
+		catch(org.json.JSONException e)
+		{
+			/* The object doesn't contain a file name.*/
+			return "";
 		}
 	}
 }

@@ -29,7 +29,6 @@ package systemRecommendation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /* With a set of pronoms of a set of Siegfried outputs and some information
  * about the rarity of systems able to read the formats associated with
@@ -44,12 +43,12 @@ public class PronomStatistics
 	private int numberOfMatches = 0;
 
 	/* Total occurences of a given pronom. */
-	private HashMap<String, Integer> generalFrequency
+	private HashMap<String, Integer> frequency
 	    = new HashMap<String, Integer>();
 
 	/* Fraction of the number of matches of a pronom
 	 * compared to all the matches of any pronom. */
-	public HashMap<String, Double> generalRelativeFrequency
+	private HashMap<String, Double> relativeFrequency
 	    = new HashMap<String, Double>();
 
 	public PronomStatistics(String directory) throws IOException
@@ -64,33 +63,26 @@ public class PronomStatistics
     		= ExtractSiegfriedData.extractPronoms(directory);
 
     	/* Count pronom frequencies. */  	
-    	for (int image = 0; image < diskImages.size(); image++)
+    	for (Disk image : diskImages)
     	{
-    		for (int file = 0; file < diskImages.get(image).files.length;
-    			file++)
+    		for (SiegfriedFile file : image.files)
     		{  			
-    			for (int match = 0;
-    				match < diskImages.get(image).files[file].matchCount();
-    				match++)
+    			for (PronomMatch match : file.matches())
     			{
-    				String pronom
-    					= diskImages.get(image).files[file].get(match);
-    				if (pronom != "UNKNOWN")
+    				if (match.pronom() != "UNKNOWN")
     				{
     			        numberOfMatches ++;
-        				incrementPronomFrequency(pronom);
+        				incrementPronomFrequency(match.pronom());
     				}
     			}
     		}
     	}
 
     	/* Calculate relative pronom frequencies. */
-    	Iterator<String> it = generalFrequency.keySet().iterator();
-    	while (it.hasNext())
+    	for (String pronom : frequency.keySet())
     	{
-    		String pronom = it.next();
-    		generalRelativeFrequency.put(pronom,
-                ((double) generalFrequency.get(pronom)) / numberOfMatches);
+    		relativeFrequency.put(pronom,
+                ((double) frequency.get(pronom)) / numberOfMatches);
     	}
     }
     
@@ -100,7 +92,7 @@ public class PronomStatistics
      */
     private void incrementPronomFrequency(String pronom)
     {
-    	Integer freq = generalFrequency.get(pronom);
+    	Integer freq = frequency.get(pronom);
 		if (freq == null)
 		{
 			freq = 1;
@@ -109,11 +101,38 @@ public class PronomStatistics
 		{
 			freq += 1;
 		}
-		generalFrequency.put(pronom, freq);
+		frequency.put(pronom, freq);
     }
     
     public int getNumberOfMatches()
     {
     	return numberOfMatches;
+    }
+    
+    /* This function returns the relative frequency of a fiven pronom
+     * in the analyzed dataset.
+     * If 40% of all pronoms in the dataset are "fmt/19",
+     * the function will return 0.4 for this pronom.
+     * The function performs a lookup in the corresponding
+     * hashmap and avoids exceptions. */
+    public double getRelativeFrequency(String pronom)
+    {
+    	Double freq = relativeFrequency.get(pronom);
+    	
+    	/* The pronom occured at least once in the dataset. */
+    	if (freq != null) { return freq; }
+    	
+    	/* The pronom didn't occur, but others occured. */
+    	if (numberOfMatches != 0) { return 1 / numberOfMatches; }
+    	
+    	/* There was not a single pronom in the dataset.
+    	 * Return 1 to avoid any pronom rarity bonus, since we don't know
+    	 * anything about pronom rarity. */
+    	return 0;
+    }
+    
+    public int getRelativeFrequencyMapSize()
+    {
+    	return relativeFrequency.size();
     }
 }

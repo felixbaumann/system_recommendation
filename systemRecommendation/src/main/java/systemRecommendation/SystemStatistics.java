@@ -29,12 +29,10 @@ package systemRecommendation;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-//import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 /* This class accepts the representations of a whole archive of systems
@@ -176,10 +174,9 @@ public class SystemStatistics
 			/* Yet first, delete all programs that definitely aren't
 			 * wikidata entity ids. */
 			ArrayList<String> invalidPrograms = new ArrayList<String>();
-			Iterator<String> iter = programs.iterator();
-			while (iter.hasNext())
+
+			for (String program : programs)	
 			{
-				String program = iter.next();
 				/* wikidata entity ids always start with a 'Q' followed
 				 * by some digits */
 				if (!program.matches("Q\\d+"))
@@ -188,9 +185,9 @@ public class SystemStatistics
 				}
 			}
 			/* Delete all flawed entity ids. */
-			for (int i = 0; i < invalidPrograms.size(); i++)
+			for (String invalidProgram : invalidPrograms)
 			{
-				programs.remove(invalidPrograms.get(i));
+				programs.remove(invalidProgram);
 			}
 			
 			/* Create SystemImages with all possibly valid programs. */
@@ -215,34 +212,29 @@ public class SystemStatistics
 		if (read) /* readable pronoms */
 		{
 			/* For each system... */
-			for (int system = 0; system < systems.size(); system++)
+			//for (int system = 0; system < systems.size(); system++)
+			for (SystemImage system : systems)
 			{
-				Iterator<String> it
-				    = systems.get(system).readablePronoms().iterator();
 				/* ... consider each pronom... */
-				while (it.hasNext())
+				for (String pronom : system.readablePronoms())
 				{
-					String current = it.next();
-					Integer value = map.get(current);
+					Integer value = map.get(pronom);
 					/* ... and increment it's counter. */
-					map.put(current, ((value != null) ? value + 1 : 1));
+					map.put(pronom, ((value != null) ? value + 1 : 1));
 				}
 			}
 		}
 		else /* writabel pronoms */
 		{
 			/* For each system... */
-			for (int system = 0; system < systems.size(); system++)
+			for (SystemImage system : systems)
 			{
-				Iterator<String> it
-				    = systems.get(system).writablePronoms().iterator();
 				/* ... consider each pronom... */
-				while (it.hasNext())
+				for (String pronom : system.writablePronoms())
 				{
-					String current = it.next();
-					Integer value = map.get(current);
+					Integer value = map.get(pronom);
 					/* ... and increment it's counter. */
-					map.put(current, ((value != null) ? value + 1 : 1));
+					map.put(pronom, ((value != null) ? value + 1 : 1));
 				}			
 			}
 		}		

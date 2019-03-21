@@ -39,73 +39,73 @@ public class PronomStatisticsTest {
 		String directory1 = directory + "partialSiegfriedData\\\\01Test\\\\";
 		PronomStatistics stats1 = new PronomStatistics(directory1);
 
-		assertEquals(10, stats1.generalRelativeFrequency.size());
+		assertEquals(10, stats1.getRelativeFrequencyMapSize());
 
-        assertEqualDoubles(stats1.generalRelativeFrequency.get("fmt/212"),
+        assertEqualDoubles(stats1.getRelativeFrequency("fmt/212"),
         		0.0129, 0.001);
 
-		assertEqualDoubles(stats1.generalRelativeFrequency.get("fmt/18"),
+		assertEqualDoubles(stats1.getRelativeFrequency("fmt/18"),
 				0.0519, 0.001);
 		
-		assertEqualDoubles(stats1.generalRelativeFrequency.get("fmt/276"),
+		assertEqualDoubles(stats1.getRelativeFrequency("fmt/276"),
 				0.0129, 0.001);
 		
-		assertEqualDoubles(stats1.generalRelativeFrequency.get("fmt/682"),
+		assertEqualDoubles(stats1.getRelativeFrequency("fmt/682"),
 				0.0064, 0.001);
 
-		assertEqualDoubles(stats1.generalRelativeFrequency.get("fmt/354"),
+		assertEqualDoubles(stats1.getRelativeFrequency("fmt/354"),
 				0.0259, 0.001);
 
-		assertEqualDoubles(stats1.generalRelativeFrequency.get("fmt/17"),
+		assertEqualDoubles(stats1.getRelativeFrequency("fmt/17"),
 				0.4870, 0.001);
 	
-		assertEqualDoubles(stats1.generalRelativeFrequency.get("fmt/20"),
+		assertEqualDoubles(stats1.getRelativeFrequency("fmt/20"),
 				0.3636, 0.001);
 
-		assertEqualDoubles(stats1.generalRelativeFrequency.get("fmt/353"),
+		assertEqualDoubles(stats1.getRelativeFrequency("fmt/353"),
 				0.0064, 0.001);
 
-		assertEqualDoubles(stats1.generalRelativeFrequency.get("x-fmt/413"),
+		assertEqualDoubles(stats1.getRelativeFrequency("x-fmt/413"),
 				0.0064, 0.001);
 
-		assertEqualDoubles(stats1.generalRelativeFrequency.get("UNKNOWN"),
+		assertEqualDoubles(stats1.getRelativeFrequency("UNKNOWN"),
 				0.0259, 0.001);	
 		
 
         String directory2 = directory + "partialSiegfriedData\\\\02Test\\\\";
 		PronomStatistics stats2 = new PronomStatistics(directory2);
 
-		assertEquals(0, stats2.generalRelativeFrequency.size());
+		assertEquals(0, stats2.getRelativeFrequencyMapSize());
 
 
 		String directory3 = directory + "partialSiegfriedData\\\\03Test\\\\";
 		PronomStatistics stats3 = new PronomStatistics(directory3);
 		
-        assertEqualDoubles(stats3.generalRelativeFrequency.get("fmt/212"),
+        assertEqualDoubles(stats3.getRelativeFrequency("fmt/212"),
         		           0.1, 0.001);
         
-        assertEqualDoubles(stats3.generalRelativeFrequency.get("fmt/18"),
+        assertEqualDoubles(stats3.getRelativeFrequency("fmt/18"),
 		           0.3, 0.001);
         
-        assertEqualDoubles(stats3.generalRelativeFrequency.get("fmt/276"),
+        assertEqualDoubles(stats3.getRelativeFrequency("fmt/276"),
 		           0.2, 0.001);
         
-        assertEqualDoubles(stats3.generalRelativeFrequency.get("UNKNOWN"),
+        assertEqualDoubles(stats3.getRelativeFrequency("UNKNOWN"),
 		           0.4, 0.001);
 
 
 		String directory4 = directory + "partialSiegfriedData\\\\04Test\\\\";
 		PronomStatistics stats4 = new PronomStatistics(directory4);
 		
-		assertEquals(3, stats4.generalRelativeFrequency.size());
+		assertEquals(3, stats4.getRelativeFrequencyMapSize());
 		
-		assertEqualDoubles(stats4.generalRelativeFrequency.get("fmt/212"),
+		assertEqualDoubles(stats4.getRelativeFrequency("fmt/212"),
 		           0.1428, 0.0001);
 		
-		assertEqualDoubles(stats4.generalRelativeFrequency.get("fmt/276"),
+		assertEqualDoubles(stats4.getRelativeFrequency("fmt/276"),
 		           0.2857, 0.0001);
 		
-		assertEqualDoubles(stats4.generalRelativeFrequency.get("UNKNOWN"),
+		assertEqualDoubles(stats4.getRelativeFrequency("UNKNOWN"),
 		           0.5714, 0.0001);
 	}
 	

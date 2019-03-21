@@ -48,6 +48,8 @@ private static String directory
 		SystemChoiceTest.test();
 		SystemStatisticsTest.test1();
 		ExtractSiegfriedDataTest.testExtractSiegfriedData();
+		SiegfriedFileTest.test();
+		FolderTest.test();
 
 		/* Tests requiring certain test files in certain directories. */
 		if (directoriesExist)

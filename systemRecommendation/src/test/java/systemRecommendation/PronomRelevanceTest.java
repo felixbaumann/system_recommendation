@@ -52,148 +52,148 @@ public class PronomRelevanceTest {
 
 
 		/* Create some SiegfriedFiles. */
-		SiegfriedFile file0 = new SiegfriedFile(0);
+		SiegfriedFile file0 = new SiegfriedFile(0, "");
         
-        SiegfriedFile file1 = new SiegfriedFile(1024);
-        file1.addMatch("fmt/18");
+        SiegfriedFile file1 = new SiegfriedFile(1024, "");
+        file1.addMatch(new PronomMatch("fmt/18"));
         
-        SiegfriedFile file2 = new SiegfriedFile(1024);
-        file2.addMatch("fmt/276");
+        SiegfriedFile file2 = new SiegfriedFile(1024, "");
+        file2.addMatch(new PronomMatch("fmt/276"));
         
-        SiegfriedFile file3 = new SiegfriedFile(1024);
-        file3.addMatch("NeverSeen");
+        SiegfriedFile file3 = new SiegfriedFile(1024, "");
+        file3.addMatch(new PronomMatch("NeverSeen"));
         
-        SiegfriedFile file4 = new SiegfriedFile(1024);
-        file4.addMatch("UNKNOWN");
+        SiegfriedFile file4 = new SiegfriedFile(1024, "");
+        file4.addMatch(new PronomMatch("UNKNOWN"));
         
-        SiegfriedFile file5 = new SiegfriedFile(1024);
-        file5.addMatch("fmt/212");
+        SiegfriedFile file5 = new SiegfriedFile(1024, "");
+        file5.addMatch(new PronomMatch("fmt/212"));
         
-        SiegfriedFile file6 = new SiegfriedFile(1024);
-        file6.addMatch("fmt/17");
+        SiegfriedFile file6 = new SiegfriedFile(1024, "");
+        file6.addMatch(new PronomMatch("fmt/17"));
         
-        SiegfriedFile file7 = new SiegfriedFile(1024);
-        file7.addMatch("fmt/20");
+        SiegfriedFile file7 = new SiegfriedFile(1024, "");
+        file7.addMatch(new PronomMatch("fmt/20"));
         
-        SiegfriedFile file8 = new SiegfriedFile(1024);
-        file8.addMatch("x-fmt/413");
+        SiegfriedFile file8 = new SiegfriedFile(1024, "");
+        file8.addMatch(new PronomMatch("x-fmt/413"));
             
-        SiegfriedFile file9 = new SiegfriedFile(2048);
-        file9.addMatch("fmt/18");
+        SiegfriedFile file9 = new SiegfriedFile(2048, "");
+        file9.addMatch(new PronomMatch("fmt/18"));
         
         /* 1 MB pdf */
-        SiegfriedFile file10 = new SiegfriedFile(1048576);
-        file10.addMatch("fmt/18");
+        SiegfriedFile file10 = new SiegfriedFile(1048576, "");
+        file10.addMatch(new PronomMatch("fmt/18"));
  
         /* 1 MB exotic file only occuring once in 01Test */
-        SiegfriedFile file11 = new SiegfriedFile(1048576);
-        file11.addMatch("x-fmt/413");
+        SiegfriedFile file11 = new SiegfriedFile(1048576, "");
+        file11.addMatch(new PronomMatch("x-fmt/413"));
         
         /* 1 GB pdf */
-        SiegfriedFile file12 = new SiegfriedFile(1073741824);
-        file12.addMatch("fmt/18");
+        SiegfriedFile file12 = new SiegfriedFile(1073741824, "");
+        file12.addMatch(new PronomMatch("fmt/18"));
         
         /* 1 GB exotic file only occuring once in 01Test */
-        SiegfriedFile file13 = new SiegfriedFile(1073741824);
-        file13.addMatch("x-fmt/413");
+        SiegfriedFile file13 = new SiegfriedFile(1073741824, "");
+        file13.addMatch(new PronomMatch("x-fmt/413"));
         
         /* 2 KB with multiple pdf matches */
-        SiegfriedFile file14 = new SiegfriedFile(2048);
-        file14.addMatch("fmt/17");
-        file14.addMatch("fmt/18");
-        file14.addMatch("fmt/20");
+        SiegfriedFile file14 = new SiegfriedFile(2048, "");
+        file14.addMatch(new PronomMatch("fmt/17"));
+        file14.addMatch(new PronomMatch("fmt/18"));
+        file14.addMatch(new PronomMatch("fmt/20"));
         
         /* 4 KB with two pdf matches */
-        SiegfriedFile file15 = new SiegfriedFile(4096);
-        file15.addMatch("fmt/17");
-        file15.addMatch("fmt/20");
+        SiegfriedFile file15 = new SiegfriedFile(4096, "");
+        file15.addMatch(new PronomMatch("fmt/17"));
+        file15.addMatch(new PronomMatch("fmt/20"));
         
-        SiegfriedFile file16 = new SiegfriedFile(8192);
-        file16.addMatch("x-fmt/17");
-        file16.addMatch("fmt/17");
-        file16.addMatch("fmt/18");
-        file16.addMatch("fmt/20");
-        file16.addMatch("fmt/276");
+        SiegfriedFile file16 = new SiegfriedFile(8192, "");
+        file16.addMatch(new PronomMatch("x-fmt/17"));
+        file16.addMatch(new PronomMatch("fmt/17"));
+        file16.addMatch(new PronomMatch("fmt/18"));
+        file16.addMatch(new PronomMatch("fmt/20"));
+        file16.addMatch(new PronomMatch("fmt/276"));
 
         /* 8 KB txt */
-        SiegfriedFile file17 = new SiegfriedFile(8192);
-        file17.addMatch("fmt/111");
+        SiegfriedFile file17 = new SiegfriedFile(8192, "");
+        file17.addMatch(new PronomMatch("fmt/111"));
         
         /* 10 KB txt */
-        SiegfriedFile file18 = new SiegfriedFile(10240);
-        file18.addMatch("fmt/111");
+        SiegfriedFile file18 = new SiegfriedFile(10240, "");
+        file18.addMatch(new PronomMatch("fmt/111"));
         
         /* 3 MB txt */
-        SiegfriedFile file19 = new SiegfriedFile(3145728);
-        file19.addMatch("fmt/111");
+        SiegfriedFile file19 = new SiegfriedFile(3145728, "");
+        file19.addMatch(new PronomMatch("fmt/111"));
         
         /* 8 KB htm */
-        SiegfriedFile file20 = new SiegfriedFile(8192);
-        file20.addMatch("fmt/96");
+        SiegfriedFile file20 = new SiegfriedFile(8192, "");
+        file20.addMatch(new PronomMatch("fmt/96"));
         
         /* 8 KB vector markup language */
-        SiegfriedFile file21 = new SiegfriedFile(8192);
-        file21.addMatch("fmt/583");
+        SiegfriedFile file21 = new SiegfriedFile(8192, "");
+        file21.addMatch(new PronomMatch("fmt/583"));
         
         /* 3 MB vector markup language */
-        SiegfriedFile file22 = new SiegfriedFile(3145728);
-        file22.addMatch("fmt/583");
+        SiegfriedFile file22 = new SiegfriedFile(3145728, "");
+        file22.addMatch(new PronomMatch("fmt/583"));
         
         /* 8 KB portable executable */
-        SiegfriedFile file23 = new SiegfriedFile(8192);
-        file23.addMatch("fmt/899");
+        SiegfriedFile file23 = new SiegfriedFile(8192, "");
+        file23.addMatch(new PronomMatch("fmt/899"));
         
         /* 12 MB portable executable */
-        SiegfriedFile file24 = new SiegfriedFile(12582912);
-        file24.addMatch("fmt/899");
+        SiegfriedFile file24 = new SiegfriedFile(12582912, "");
+        file24.addMatch(new PronomMatch("fmt/899"));
         
         /* 8 KB xml property list*/
-        SiegfriedFile file25 = new SiegfriedFile(8192);
-        file25.addMatch("fmt/979");
+        SiegfriedFile file25 = new SiegfriedFile(8192, "");
+        file25.addMatch(new PronomMatch("fmt/979"));
         
         /* 12 MB xml property list*/
-        SiegfriedFile file26 = new SiegfriedFile(12582912);
-        file26.addMatch("fmt/979");
+        SiegfriedFile file26 = new SiegfriedFile(12582912, "");
+        file26.addMatch(new PronomMatch("fmt/979"));
 
 
         /* Create some disks containing files. */
-        Disk disk1 = new Disk(new SiegfriedFile[] {});
-        Disk disk2 = new Disk(new SiegfriedFile[] {file1});
-        Disk disk3 = new Disk(new SiegfriedFile[] {file1, file2});       
-        Disk disk4 = new Disk(new SiegfriedFile[] {file1, file2, file3});
+        Disk disk1 = new Disk(new SiegfriedFile[] {}, "");
+        Disk disk2 = new Disk(new SiegfriedFile[] {file1}, "");
+        Disk disk3 = new Disk(new SiegfriedFile[] {file1, file2}, "");       
+        Disk disk4 = new Disk(new SiegfriedFile[] {file1, file2, file3}, "");
         Disk disk5 = new Disk(new SiegfriedFile[] {file1, file1, file1,
-        	file2, file4, file5, file6, file7, file13});
+        	file2, file4, file5, file6, file7, file13}, "");
 
-        Disk disk6 = new Disk(new SiegfriedFile[] {file0});
+        Disk disk6 = new Disk(new SiegfriedFile[] {file0}, "");
         Disk disk7 = new Disk(new SiegfriedFile[] {file19, file19, file19,
-        	file19, file19, file24, file26});
+        	file19, file19, file24, file26}, "");
 
         Disk disk8 = new Disk(new SiegfriedFile[] {file1, file2, file3,
             file4, file5, file6, file7, file8, file9, file10, file11, file12,
             file13, file14, file15, file16, file17, file18, file19, file20,
-            file21, file22, file23, file24, file25, file26});
+            file21, file22, file23, file24, file25, file26}, "");
 
         Disk disk9 = new Disk(new SiegfriedFile[] {file21, file21, file7,
-        	file9});
+        	file9}, "");
 
         Disk disk10 = new Disk(new SiegfriedFile[] {file4, file5, file6,
-            file4, file4, file6});
+            file4, file4, file6}, "");
 
-        Disk disk11 = new Disk(new SiegfriedFile[] {file24, file12});
+        Disk disk11 = new Disk(new SiegfriedFile[] {file24, file12}, "");
 
         Disk disk12 = new Disk(new SiegfriedFile[] {file4, file4, file9,
-                file9, file4, file19});
+                file9, file4, file19}, "");
 
-        Disk disk13 = new Disk(new SiegfriedFile[] {file24, file25}); 
+        Disk disk13 = new Disk(new SiegfriedFile[] {file24, file25}, ""); 
 
         Disk disk14 = new Disk(new SiegfriedFile[] {file6, file6, file7,
-            	file12});
+            	file12}, "");
 
         Disk disk15 = new Disk(new SiegfriedFile[] {file12, file12, file12,
-            	file13});   
+            	file13}, "");   
 
         Disk disk16 = new Disk(new SiegfriedFile[] {file16, file16, file16,
-            	file14, file14});
+            	file14, file14}, "");
 
 
         /* Use disk 1-16 for statistics 1-5 */

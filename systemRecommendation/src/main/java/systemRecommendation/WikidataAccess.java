@@ -108,9 +108,9 @@ public class WikidataAccess {
 		ArrayList<String> readableFiles = new ArrayList<String>();
 	
 		// Get the QIDs of all readableFileFormats and store them in an array.
-        for (int i = 0; i < statements.size(); i++)
+        for (Statement statement : statements)
         {
-        	readableFiles.add(((ItemIdValue)statements.get(i).getValue())
+        	readableFiles.add(((ItemIdValue)statement.getValue())
         	    .getId().toString());
         }
 

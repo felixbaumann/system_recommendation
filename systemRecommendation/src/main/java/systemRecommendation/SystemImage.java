@@ -66,7 +66,8 @@ public class SystemImage {
 	private HashSet<String> readablePronoms;
 	private HashSet<String> writablePronoms;
 
-
+    public double suitability = 0.0;
+	
 	/* Constructor for a system image representing a system environment.
 	 * 
 	 * Preferred constructor.

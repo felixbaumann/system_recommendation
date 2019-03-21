@@ -129,15 +129,15 @@ public class ParameterTuning {
 	{
 		int score = 0;
 		/* Calculate the relevance of each disk with this parameter option. */
-		for (int disk = 0; disk < disks.size(); disk++)
+		for (Disk disk : disks)
 		{
 			HashMap<String, Double> relevances
 			    = PronomRelevance.relativePronomRelevances(
-			    	disks.get(disk), pronomStats, option[0],
+			    	disk, pronomStats, option[0],
 			    	option[1], option[2]);
 			/* If the pronom with the largest relevance is the correct one,
 			 * increment the score of this option. */
-			if(validRelevances(relevances, disks.get(disk))) { score++; }
+			if(validRelevances(relevances, disk)) { score++; }
 		}
 		return score;
 	}
@@ -198,64 +198,64 @@ public class ParameterTuning {
 		 * fmt/276		pdf 1.7
 		 * fmt/899		exe
 		 */
-		SiegfriedFile file01 = new SiegfriedFile(1024, new String[] {"fmt/18"});
-		SiegfriedFile file02 = new SiegfriedFile(2048, new String[] {"fmt/18"});
-		SiegfriedFile file03 = new SiegfriedFile(1024, new String[] {"fmt/17"});
-		SiegfriedFile file04 = new SiegfriedFile(2048, new String[] {"fmt/17"});
-		SiegfriedFile file05 = new SiegfriedFile(1024, new String[] {"x-fmt/111"});
-		SiegfriedFile file06 = new SiegfriedFile(10240, new String[] {"x-fmt/111"});
-		SiegfriedFile file07 = new SiegfriedFile(4096, new String[] {"fmt/18"});
-		SiegfriedFile file08 = new SiegfriedFile(12288, new String[] {"fmt/18"});
-		SiegfriedFile file09 = new SiegfriedFile(15360, new String[] {"fmt/18"});
-		SiegfriedFile file10 = new SiegfriedFile(10240, new String[] {"fmt/134"});
-		SiegfriedFile file11 = new SiegfriedFile(8594231, new String[] {"fmt/20"});
-		SiegfriedFile file12 = new SiegfriedFile(52, new String[] {"fmt/212"});
+		SiegfriedFile file01 = new SiegfriedFile(1024, "", new PronomMatch[] {new PronomMatch("fmt/18")});
+		SiegfriedFile file02 = new SiegfriedFile(2048, "", new PronomMatch[] {new PronomMatch("fmt/18")});
+		SiegfriedFile file03 = new SiegfriedFile(1024, "", new PronomMatch[] {new PronomMatch("fmt/17")});
+		SiegfriedFile file04 = new SiegfriedFile(2048, "", new PronomMatch[] {new PronomMatch("fmt/17")});
+		SiegfriedFile file05 = new SiegfriedFile(1024, "", new PronomMatch[] {new PronomMatch("x-fmt/111")});
+		SiegfriedFile file06 = new SiegfriedFile(10240, "", new PronomMatch[] {new PronomMatch("x-fmt/111")});
+		SiegfriedFile file07 = new SiegfriedFile(4096, "", new PronomMatch[] {new PronomMatch("fmt/18")});
+		SiegfriedFile file08 = new SiegfriedFile(12288, "", new PronomMatch[] {new PronomMatch("fmt/18")});
+		SiegfriedFile file09 = new SiegfriedFile(15360, "", new PronomMatch[] {new PronomMatch("fmt/18")});
+		SiegfriedFile file10 = new SiegfriedFile(10240, "", new PronomMatch[] {new PronomMatch("fmt/134")});
+		SiegfriedFile file11 = new SiegfriedFile(8594231, "", new PronomMatch[] {new PronomMatch("fmt/20")});
+		SiegfriedFile file12 = new SiegfriedFile(52, "", new PronomMatch[] {new PronomMatch("fmt/212")});
 		
-		SiegfriedFile file13 = new SiegfriedFile(25888, new String[] {"x-fmt/418"});
-		SiegfriedFile file14 = new SiegfriedFile(593, new String[] {"x-fmt/111"});
-		SiegfriedFile file15 = new SiegfriedFile(39, new String[] {"fmt/212"});
-		SiegfriedFile file16 = new SiegfriedFile(441038, new String[] {"fmt/20"});
-		SiegfriedFile file17 = new SiegfriedFile(15229994, new String[] {"fmt/276"});
-		SiegfriedFile file18 = new SiegfriedFile(47, new String[] {"fmt/212"});
-		SiegfriedFile file19 = new SiegfriedFile(768110306, new String[] {"fmt/899"});
-		SiegfriedFile file20 = new SiegfriedFile(438054, new String[] {"x-fmt/418"});
+		SiegfriedFile file13 = new SiegfriedFile(25888, "", new PronomMatch[] {new PronomMatch("x-fmt/418")});
+		SiegfriedFile file14 = new SiegfriedFile(593, "", new PronomMatch[] {new PronomMatch("x-fmt/111")});
+		SiegfriedFile file15 = new SiegfriedFile(39, "", new PronomMatch[] {new PronomMatch("fmt/212")});
+		SiegfriedFile file16 = new SiegfriedFile(441038, "", new PronomMatch[] {new PronomMatch("fmt/20")});
+		SiegfriedFile file17 = new SiegfriedFile(15229994, "", new PronomMatch[] {new PronomMatch("fmt/276")});
+		SiegfriedFile file18 = new SiegfriedFile(47, "", new PronomMatch[] {new PronomMatch("fmt/212")});
+		SiegfriedFile file19 = new SiegfriedFile(768110306, "", new PronomMatch[] {new PronomMatch("fmt/899")});
+		SiegfriedFile file20 = new SiegfriedFile(438054, "", new PronomMatch[] {new PronomMatch("x-fmt/418")});
 		
-		SiegfriedFile file21 = new SiegfriedFile(266480778, new String[] {"fmt/20"});
-		SiegfriedFile file22 = new SiegfriedFile(326224597, new String[] {"fmt/899"});
+		SiegfriedFile file21 = new SiegfriedFile(266480778, "", new PronomMatch[] {new PronomMatch("fmt/20")});
+		SiegfriedFile file22 = new SiegfriedFile(326224597, "", new PronomMatch[] {new PronomMatch("fmt/899")});
 		
 		// TODO create more files
 
 
 		ArrayList<Disk> disks = new ArrayList<Disk>();
-		disks.add(new Disk("fmt/18", new SiegfriedFile[] {file01}));
+		disks.add(new Disk("fmt/18", new SiegfriedFile[] {file01}, ""));
 		disks.add(new Disk("fmt/18", new SiegfriedFile[] {file01, file02,
-			file03}));
-		disks.add(new Disk("fmt/18", new SiegfriedFile[] {file02, file03}));
+			file03}, ""));
+		disks.add(new Disk("fmt/18", new SiegfriedFile[] {file02, file03}, ""));
 		disks.add(new Disk("fmt/17", new SiegfriedFile[] {file02, file03,
-			file03}));
-		disks.add(new Disk("fmt/17", new SiegfriedFile[] {file01, file04}));
+			file03}, ""));
+		disks.add(new Disk("fmt/17", new SiegfriedFile[] {file01, file04}, ""));
 		disks.add(new Disk("fmt/17", new SiegfriedFile[] {file01, file04,
-			file05}));
+			file05}, ""));
 		disks.add(new Disk("x-fmt/111", new SiegfriedFile[] {file01, file04,
-			file06}));
+			file06}, ""));
 		disks.add(new Disk("fmt/17", new SiegfriedFile[] {file01, file04, 
-			file04, file04, file07}));
+			file04, file04, file07}, ""));
 		disks.add(new Disk("fmt/17", new SiegfriedFile[] {file03, file03,
 			file03, file03, file03, file03, file03, file03, file03, file03,
-			file08}));
+			file08}, ""));
 		disks.add(new Disk("fmt/17", new SiegfriedFile[] {file03, file03,
 			file03, file03, file03, file03, file03, file03, file03,
-			file03, file09}));
-		disks.add(new Disk("fmt/134", new SiegfriedFile[] {file06, file10}));
-		disks.add(new Disk("fmt/20", new SiegfriedFile[] {file11, file12}));
+			file03, file09}, ""));
+		disks.add(new Disk("fmt/134", new SiegfriedFile[] {file06, file10}, ""));
+		disks.add(new Disk("fmt/20", new SiegfriedFile[] {file11, file12}, ""));
 		disks.add(new Disk("fmt/276", new SiegfriedFile[] {file13, file14,
 			file15, file16, file16, file16, file16, file17, file17, file17,
 			file17, file17, file17, file17, file17, file17, file17, file17,
 			file17, file17, file17, file17, file17, file17, file17, file17,
-			file17, file17, file17, file17, file17, file17}));
+			file17, file17, file17, file17, file17, file17}, ""));
 		disks.add(new Disk("fmt/899", new SiegfriedFile[] {file18, file19,
-				file20}));
-		disks.add(new Disk("fmt/899", new SiegfriedFile[] {file21, file22}));
+				file20}, ""));
+		disks.add(new Disk("fmt/899", new SiegfriedFile[] {file21, file22}, ""));
 		// TODO create more disks
 		
 		

@@ -34,21 +34,63 @@ public class Disk {
 	/* All the files on the disk. */
 	public SiegfriedFile[] files;
 	
+	/* This folder represents the files of the entire disk.
+	 * It contains all the SiegfriedFiles from 'files', yet ordered according
+	 * to their directories. */
+	public Folder disk;
+
+	/* Regular constructor. */
+	public Disk(SiegfriedFile[] files, String diskName)
+	{
+		this.files = files;
+		name = diskName;
+		disk = orderFiles(files);
+	}
+	
+	/* This function orders a list of files according to their directories
+	 * in folders ans subfolders.
+	 */
+	private Folder orderFiles(SiegfriedFile[] files)
+	{
+		Folder disk = new Folder("");
+		
+		/* Add each file, one after the other.*/
+		for (SiegfriedFile file : files)
+		{
+			if (file == null) {continue; }
+
+			/* Iterate over the subfolders of the directory of the current file.
+			 * If the subfolder name is valid, add it if necessary and proceed
+			 *  to the next subfolder.
+			 */
+			Folder currentSubfolder = disk;
+			for (String subfolder : file.getDirectory())
+			{
+				if (subfolder != "")
+				{
+					currentSubfolder = currentSubfolder.addFolder(subfolder);
+				}
+			}
+			/* We've reached the correct subfolder. Now add the file. */
+			currentSubfolder.addFile(file);
+		}
+		return disk;
+	}
+	
+	
 	/* The name of the most relevant pronom on the disk.
 	 * Used for parameter tuning. */
 	private String mostRelevantPronom = "";
-	
-	/* Regular constructor. */
-	public Disk(SiegfriedFile[] someFiles)
-	{
-		files = someFiles;
-	}
+
+	/* Disk name (usually xy.ISO) */
+	public String name = "";	
 	
 	/* Constructor for parameter tuning. */
-	public Disk(String mostImportantPronom, SiegfriedFile[] someFiles)
+	public Disk(String mostImportantPronom, SiegfriedFile[] someFiles, String diskName)
 	{
 		mostRelevantPronom = mostImportantPronom;
 		files = someFiles;
+		name = diskName;
 	}
 	
 	public String getMostRelevantPronom()

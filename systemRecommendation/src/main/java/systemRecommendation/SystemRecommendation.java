@@ -47,7 +47,7 @@ public class SystemRecommendation
 {	
 	/* The recommended system number will be stored here making it accessible
 	 * for the test class. */
-	public static int chosenSystem;
+	public static int[] chosenSystems;
 	
 	/* This is the main class for system recommendation.
 	 * 
@@ -61,15 +61,15 @@ public class SystemRecommendation
 	 * 					given disk for which a system shall be recommended.
 	 * 
 	 * OPTIONAL:
-	 * ARGS[3]			Parameter for the influence of duplicates on
-	 * 					the relevance formular. Default is 0.33333.
+	 * ARGS[3]			Parameter for the influence of path depth of files on
+	 * 					the relevance formular. Default is 0.8.
 	 * 
-	 * ARGS[4]			Parameter for the influence of filesizes on
-	 * 					the relevance formular. Default is 0.33333.
+	 * ARGS[4]			Parameter for the influence of statistical pronom 
+	 *                  frequencies on the relevance formular. Default is 0.2.
 	 * 
-	 * ARGS[5]			Parameter for the influence of statistical pronom
+	 * ARGS[5]			Parameter for the influence of statistical system
 	 *					frequencies on the relevance formular.
-	 *					Default is 0.33333.
+	 *					Default is 0.2.
 	 *
 	 * RETURN			Prints the number of the recommended system to
 	 * 					standard output. The number corresponds to the line
@@ -90,17 +90,17 @@ public class SystemRecommendation
 		
 		/* Default values for the parameters weighting
 		 * the relevance influencers. */
-		double duplicateParameter = 0.33333;
-		double sizeParameter = 0.33333;
-		double frequencyParameter = 0.33333;
+		double depthParam = 0.8;
+		double pronomFrequencyParam = 0.2;
+		double systemFrequencyParam = 0.2;
 
 		/* If values for those parameters are given,
 		 * obviously use the given ones instead. */
 		if (args.length == 6)
 		{
-			duplicateParameter = Double.parseDouble(args[3]);
-			sizeParameter = Double.parseDouble(args[4]);
-			frequencyParameter = Double.parseDouble(args[5]);
+			depthParam = Double.parseDouble(args[3]);
+			pronomFrequencyParam = Double.parseDouble(args[4]);
+			systemFrequencyParam = Double.parseDouble(args[5]);
 		}
 
 		SystemStatistics systemStats = createSystemStats(systemsFile);
@@ -109,23 +109,23 @@ public class SystemRecommendation
 		/* Get the content on the disk. */
 		Disk disk
 		    = ExtractSiegfriedData.extractSiegfriedDataFromFile(
-		    	siegfriedOutputForDisk);
+		    	siegfriedOutputForDisk, "");
 
 		/* Calculate the relevance of each pronom occuring on the disk. */
 		HashMap<String, Double> relevances
-		    = PronomRelevance.relativePronomRelevances(
-		    	disk, pronomStats, duplicateParameter, sizeParameter,
-		    	frequencyParameter);
+		    = PronomRelevance.pronomRelevances(
+		    	disk, pronomStats, systemStats, depthParam,
+		    	pronomFrequencyParam, systemFrequencyParam);
 
-		/* Recommend a system maximizing the relevance.
-		 * The third argument is the number of the default system. */
-		chosenSystem = SystemChoice.chooseSystem(systemStats.systems,
-			relevances, 0);
+		/* Recommend a system maximizing the relevance. */
+		SystemChoice sysChoice
+		    = new SystemChoice(systemStats.systems, relevances);
+		chosenSystems = sysChoice.chooseSystems();
 
 		/* Inform about the id of the recommended system.
 		 * Note that the ids start with 0, therefore id+1 is the line in
 		 * the systems file representing the chosen system. */
-		System.out.println(chosenSystem);
+		output(chosenSystems);
 	}
 
 	/* This function creates system statistics from a given file containing
@@ -165,4 +165,22 @@ public class SystemRecommendation
 		}
 		return pronomStats;
 	}
+
+	/* Just print the chosen systems, divided by commas.
+	 * If there are no chosen systems, print '-1'. */
+    private static void output(int[] chosenSystems)
+    {
+    	if (chosenSystems.length == 0)
+    	{
+    		System.out.println(-1);
+    		return;
+    	}
+    	String out = "";
+    	for (int i : chosenSystems)
+    	{
+    		out += (i + ",");
+    	}
+    	out = out.substring(0, out.length() - 1);
+    	System.out.println(out);
+    }
 }

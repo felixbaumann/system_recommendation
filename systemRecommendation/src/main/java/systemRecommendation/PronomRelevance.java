@@ -26,6 +26,7 @@
 
 package systemRecommendation;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -40,58 +41,6 @@ import java.util.Iterator;
  */
 public class PronomRelevance
 {
-	/* METHOD IS DEPRECATED.
-	 * 
-	 * This function computes the relevances of the pronoms occuring in a list
-	 * of files. Those relevances are partly based on pronom statistics
-	 * that have to be given as well.
-	 * 
-	 * FILES     A list of SiegfriedFiles representing a whole disk of files.
-	 *           The relevance of the pronoms of these files will be
-	 *           evaluated.
-	 * 
-	 * PRONOMSTATS Statistics on the relative frequency of pronoms based on
-	 *             a (hopefully) large dataset. Do NOT only use the files
-	 *             above.
-	 * 
-	 * RETURN    A HashMap mapping from pronoms occuring in the files
-	 *           to a relevance value for each of them.
-	 */
-	public static HashMap<String, Double> pronomRelevances(
-	    Disk disk, PronomStatistics pronomStats)
-	{
-		HashMap<String, Double> relevances = initializeRelevanceMap(disk);
-
-		HashMap<String, Double> rootedPronomFrequencies
-		    = cubicRootOfPronomFrequencies(pronomStats);
-
-		/* For each SiegfriedFile... */
-		for (int i = 0; i < disk.files.length; i++)
-		{
-			SiegfriedFile file = disk.files[i];
-
-			/* ... calculate a file dependent relevance factor... */
-			double fileRelevance 
-			    = Math.sqrt(file.fileSize()) / file.matchCount();
-
-			/* ... and for each match... */
-			for (int match = 0; match < file.matchCount(); match++)
-			{
-				/* ... increment the relevance of this pronom. */
-				String pronom = file.matches().get(match);
-
-				double newRelevance = relevances.get(pronom) 
-				    + fileRelevance / getRootedPronomFrequency(pronom,
-				        rootedPronomFrequencies,
-				        pronomStats.getNumberOfMatches());
-
-				relevances.put(pronom, newRelevance);
-			}
-		}
-		return relevances;
-	}
-
-
 	/* This function implements an alternative relevance metric
 	 * than pronomRelevances().
 	 * 
@@ -138,14 +87,13 @@ public class PronomRelevance
 
 		/* Compute the number of instances of all pronoms
 		 * and the sizes of their files. */
-		for (int i = 0; i < fileNumber; i++)
+		for (SiegfriedFile file : disk.files)
 		{
-			SiegfriedFile file = disk.files[i];
 			diskSize += file.fileSize();
 
-			for (int match = 0; match < file.matchCount(); match++)
+			for (PronomMatch match : file.matches())
 			{
-				String pronom = file.matches().get(match);
+				String pronom = match.pronom();
 				formatInstances.put(pronom,
 					formatInstances.get(pronom) + 1 / file.matchCount());
 				formatSizes.put(pronom,
@@ -156,19 +104,18 @@ public class PronomRelevance
 
 		/* Compute the sum of the relative frequencies of all occuring pronoms
 		 * on the disk. */
-		Iterator<String> iter = relevances.keySet().iterator();
 		double sumOfRelativeFrequencies = 0.0;
-		while (iter.hasNext())
+		for(String pronom : relevances.keySet())
 		{
 			sumOfRelativeFrequencies
-			    += getPronomFrequency(iter.next(), pronomStats);
+			    += pronomStats.getRelativeFrequency(pronom);
 		}
 
 		/* Combine the relevance factors. */
-		Iterator<String> iter2 = relevances.keySet().iterator();
-		while (iter2.hasNext())
+		Iterator<String> iter = relevances.keySet().iterator();
+		while (iter.hasNext())
 		{
-			String pronom = iter2.next();
+			String pronom = iter.next();
 			double relevance = 0;
 			relevance += duplicateParameter
 				* ((double) formatInstances.get(pronom)) / fileNumber;
@@ -177,7 +124,7 @@ public class PronomRelevance
 			if (sumOfRelativeFrequencies > 0)
 			{
 				relevance += frequencyParameter
-					* (1 - getPronomFrequency(pronom, pronomStats)
+					* (1 - pronomStats.getRelativeFrequency(pronom)
 						/ sumOfRelativeFrequencies);
 			}
 			relevances.put(pronom, relevance);	
@@ -185,81 +132,210 @@ public class PronomRelevance
 		return relevances;
 	}
 
-	/* This function performs a lookup in the rootedPronomFrequency map
-	 * for a given pronom. The map was created with data from the pronom
-	 * statistics dataset where not every possible pronom appeared.
-	 * Therefore it is not uncommon that there is no value for a pronom
-	 * on a disk.
-	 * In this case we will treat this pronom as if it appeared just once.
+	/* This function implements the current relevance metric.
 	 * 
-	 */
-	private static double getRootedPronomFrequency(
-		String pronom,
-	    HashMap<String, Double> rootedPronomFrequencies,
-	    int totalNumberOfMatches)
+	 * DISK		The disk for which systems shall be recommended. 
+	 * 
+	 * PRONOMSTATS Statistics on the relative frequency of pronoms based on
+	 *             a (hopefully) large dataset. Do NOT only use the files
+	 *             above.
+	 *             
+	 * SYSTEMSTATS Statistics on the rarity of the ability to read certain
+	 *             pronoms, based on the available systems.
+	 *             
+	 * DEPTHPAR	        Defines the influence the depth of a path has
+	 * 					on the relevance of a file. 
+	 * 					(Large value is a small influence.)
+	 * 
+	 * PRONOMFREQPAR	Defines the influence of statistical pronom
+	 * 					frequencies on the relevance.
+	 * 					(Large value is a large influence.)
+	 * 
+	 * SYSTEMFREQPAR	Defines the influence of statistical system
+	 * 					frequencies on the relevance.
+	 * 					(Large value is a large influence.)
+	 * */
+	public static HashMap<String, Double> pronomRelevances(
+		    Disk disk, PronomStatistics pronomStats,
+		    SystemStatistics systemStats,
+		    double depthPar, double pronomFreqPar,
+		    double systemFreqPar)
 	{
-		/* If the pronom occured in the statistics dataset,
-		 * there is a rooted frequency which can be returned. */
-		if (rootedPronomFrequencies.get(pronom) != null)
-		{
-			return rootedPronomFrequencies.get(pronom);
-		}
-		/* If the pronom has never occured in the dataset, it's rather exotic
-		 * and will be treated as if it appeared just once. */
-		return Math.cbrt(1 / totalNumberOfMatches);
-	}
-	
-	/* This function performs a lookup in the pronom statistics.
-	 * for a given pronom. The map was created with data from the pronom
-	 * statistics dataset where not every possible pronom appeared.
-	 * Therefore it is not uncommon that there is no value for a pronom
-	 * on a disk.
-	 * In this case we will treat this pronom as if it appeared just once.
-	 */
-	private static double getPronomFrequency(
-		String pronom,
-	    PronomStatistics pronomStats)
-	{
-		/* If the pronom occured in the statistics dataset,
-		 * there is a frequency which can be returned. */
-		if (pronomStats.generalRelativeFrequency.get(pronom) != null)
-		{
-			return pronomStats.generalRelativeFrequency.get(pronom);
-		}
-		/* If the pronom has never occured in the dataset, it's rather exotic
-		 * and will be treated as if it appeared just once.
-		 * If the dataset was entirely empty, no frequencies are known
-		 * and all pronoms will be treated equally. 
-		 */
-		int trainingMatches = pronomStats.getNumberOfMatches();
-		return (trainingMatches > 0 ? 1 / trainingMatches : 0);
-	}
-	
-	/* This function computes the cubic roots
-	 * of all general relative pronom frequencies. 
-	 */
-	private static HashMap<String, Double> cubicRootOfPronomFrequencies(
-	    PronomStatistics stats)
-	{
-		HashMap<String, Double> result = new HashMap<String, Double>();
+		/* Start with a relevance value of 100% for the entire disk
+		 * and share this relevance between all matches of all files. */
+		fileRelevance(disk.disk, 1.0, depthPar);
 
-		Iterator<String> iter
-		    = stats.generalRelativeFrequency.keySet().iterator();
+		HashMap<String, Double> relevances = sumMatchRelevances(disk);
+		
+		/* Project relevances to [0, 1]. */
+		normalizeRelevances(relevances);
+		
+		/* Add a relevance value for the rarity of the pronoms. */
+		addPronomRarity(relevances, pronomStats, pronomFreqPar);
+		
+		/* Add a relevance value for the rarity of systems being able to read
+		 * the pronom. */
+		addSystemRarity(relevances, systemStats, systemFreqPar);		
+		
+		/* Normalize again. Yes, twice is necessary. */
+		normalizeRelevances(relevances);
 
-		/* For each pronom key in stats compute the cubic root of its value
-		 * and add this pair to the resulting map.
-		 */
+		return relevances;
+	}
+
+	/* This function modifies the given pronom relevances by adding a bonus
+	 * for pronom rarity.
+	 * If the pronom appears only a few times in a large dataset, it's
+	 * rather exotic and therefore the bonus is rather large,
+	 * otherwise comparably low.
+	 * There is no bonus, if the whole dataset consists only of a single
+	 * pronom.
+	 * The largest bonus is given to pronoms that appear only once in
+	 * the dataset. */
+	private static void addPronomRarity(HashMap<String, Double> relevances,
+		PronomStatistics pronomStats, double pronomFreqPar)
+	{
+		/* Iterate over all pronoms and calculate their rarity bonus. */
+		Iterator<String> iter = relevances.keySet().iterator();
 		while (iter.hasNext())
 		{
 			String pronom = iter.next();
-			result.put(pronom,
-			    Math.cbrt(stats.generalRelativeFrequency.get(pronom)));
+			
+			/* The relevance value without any pronom rarity bonus. */
+			Double oldRelevance = relevances.get(pronom);
+			
+			/* Since relevance drops with a higher frequency, we use
+			 * (1 - frequency). */
+			Double rarityBonus = pronomFreqPar
+				* (1 - pronomStats.getRelativeFrequency(pronom));
+
+			/* If there is any information about the pronom rarity,
+			 * add a relevance bonus.
+			 * The rarer the pronom, the larger the bonus. */
+			relevances.put(pronom,
+				oldRelevance + rarityBonus);
 		}
-
-		return result;
 	}
-
-
+	
+	
+	/* This function modifies the given pronom relevances by adding a bonus
+	 * for system rarity.
+	 * If only few systems can read the pronom, the bonus is rather large,
+	 * otherwise comparably low.
+	 * There is no bonus for pronoms that can't be
+	 * read by any system at all. Those won't matter anyway.
+	 * The largest bonus is given to pronoms that can only be read by one
+	 * single system. */
+	private static void addSystemRarity(HashMap<String, Double> relevances,
+		SystemStatistics systemStats, double systemFreqPar)
+	{
+		/* Iterate over all pronoms and calculate their rarity bonus. */
+		Iterator<String> iter = relevances.keySet().iterator();
+		while (iter.hasNext())
+		{
+			String pronom = iter.next();
+			
+			/* The relevance value without any system rarity bonus. */
+			Double oldRelevance = relevances.get(pronom);
+			
+			/* The number of systems able to read the pronom. */
+			Integer systems = systemStats.readingSystems.get(pronom);
+			
+			if (systems == null) { continue; }
+			if (systems <= 0) { continue; }
+			
+			/* If there is any information about the system rarity,
+			 * add a relevance bonus.
+			 * The rarer the systems, the larger the bonus. */
+			relevances.put(pronom,
+				oldRelevance + (1.0 / (double) systems) * systemFreqPar);
+		}
+	}
+	
+	/* This function accepts a hashmap of relevance values for pronoms
+	 * and normalizes these relevances by projecting them on [0, 1]. */
+	private static void normalizeRelevances(
+		HashMap<String, Double> relevances)
+	{
+		/* 1. Find the largest relevance value. */
+		Double max = Collections.max(relevances.values());
+		
+		if (max <= 0 || max == null) { return; }
+		
+		/* 2. Perform the projections. */
+		Iterator<String> iter = relevances.keySet().iterator();
+		while (iter.hasNext())
+		{
+			String pronom = iter.next();
+			Double oldRelevance = relevances.get(pronom);
+			relevances.put(pronom, oldRelevance == null ? null : oldRelevance / max);
+		}
+	}
+	
+	/* This function sums up the relevances of all matches
+	 * of the same pronom across the disk.
+	 * 
+	 * RETURNS	A hashmap containing the relevances for each pronom.
+	 */
+	private static HashMap<String, Double> sumMatchRelevances(Disk disk)
+	{
+		HashMap<String, Double> relevances = initializeRelevanceMap(disk);
+		
+		/* For all matches of all files:
+		 * Sum up the relevances for each pronom. */
+		for (SiegfriedFile file : disk.files)
+		{
+			for (PronomMatch match : file.matches())
+			{
+				String pronom = match.pronom();
+				relevances.put(pronom,
+					relevances.get(pronom) + match.getRelevance());
+			}
+		}
+		return relevances;
+	}
+	
+	/*
+	 * RELEVANCE  The relevance value that shall be shared between the files and the subfolders.
+	 */
+	private static void fileRelevance(Folder folder, double relevance,
+		double depthPenalty)
+	{
+		double folderSize = getFolderSize(folder, depthPenalty);
+		
+		/* Each file gets a relevance according to its share
+		 * of the folder size. */
+		for (SiegfriedFile file : folder.files())
+		{
+			file.setRelevance(relevance * (file.fileSize() / folderSize));
+		}
+		
+		/* Each subfolder gets a relevance according to its share
+		 * of the folder size recursively. */
+		for (Folder subfolder : folder.folders().values())
+		{
+			fileRelevance(subfolder, relevance * (subfolder.size(depthPenalty)
+				/ folderSize), depthPenalty);
+		}
+	}
+	
+	/* This function returns the size of the given folder as the sum of all
+	 * its subfolders and files. */
+	private static double getFolderSize(Folder folder, double depthPenalty)
+	{
+		double size = 0;
+		for (Folder subfolder : folder.folders().values())
+		{
+			size += subfolder.size(depthPenalty);
+		}
+		for (SiegfriedFile file : folder.files())
+		{
+			size += file.fileSize();
+		}
+		return size;
+		
+	}
+	
 	/* This function creates a Map containing a key for every pronom
 	 * occuring in the Siegfried files.
 	 * Default value is 0.
@@ -270,11 +346,11 @@ public class PronomRelevance
 		HashMap<String, Double> emptyRelevances
 		    = new HashMap<String, Double>();
 
-		for (int i = 0; i < disk.files.length; i++)
+		for (SiegfriedFile file : disk.files)
 		{
-			for (int k = 0; k < disk.files[i].matchCount(); k++)
+			for (PronomMatch match : file.matches())
 			{
-				emptyRelevances.put(disk.files[i].matches().get(k), 0.0);
+				emptyRelevances.put(match.pronom(), 0.0);
 			}
 		}
 		return emptyRelevances;
@@ -290,11 +366,11 @@ public class PronomRelevance
 		HashMap<String, Integer> emptyRelevances
 		    = new HashMap<String, Integer>();
 
-		for (int i = 0; i < disk.files.length; i++)
+		for (SiegfriedFile file : disk.files)
 		{
-			for (int k = 0; k < disk.files[i].matchCount(); k++)
+			for (PronomMatch match : file.matches())
 			{
-				emptyRelevances.put(disk.files[i].matches().get(k), 0);
+				emptyRelevances.put(match.pronom(), 0);
 			}
 		}
 		return emptyRelevances;

@@ -43,10 +43,10 @@ public class ExtractSiegfriedDataTest {
 		if (result.size() == 3)
 		{
 			/* 1.ISO */
-			assertEquals(result.get(0).files[0].get(0), "fmt/18");
+			assertEquals(result.get(0).files[0].getMatch(0).pronom(), "fmt/18");
 	
 			/* 3.ISO */
-			assertEquals(result.get(2).files[0].get(0), "fmt/212");
+			assertEquals(result.get(2).files[0].getMatch(0).pronom(), "fmt/212");
 		}		
 	}
 
@@ -57,7 +57,7 @@ public class ExtractSiegfriedDataTest {
 		boolean exception = false;
 		try 
 		{
-		    ExtractSiegfriedData.extractSiegfriedDataFromString("");
+		    ExtractSiegfriedData.extractSiegfriedDataFromString("", "");
 		}
 		catch(org.json.JSONException e)
 		{
@@ -67,21 +67,21 @@ public class ExtractSiegfriedDataTest {
 
 		/* Extract from empty JSON object. */
 		assertTrue(ExtractSiegfriedData.extractSiegfriedDataFromString(
-			"{}").files.length == 0);
+			"{}", "").files.length == 0);
 
 		/* Extract from JSON object with two files and two matches
 		 * for one of those. */
 		String json = "{\"files\":[{\"matches\":[{\"id\":\"fmt/18\"}, "
 			+ "{\"id\":\"fmt/19\"}]}, {\"matches\":[{\"id\":\"fmt/18\"}]}]}";
 		Disk pronoms
-			= ExtractSiegfriedData.extractSiegfriedDataFromString(json);
+			= ExtractSiegfriedData.extractSiegfriedDataFromString(json, "");
 		
 		assertTrue(pronoms.files.length == 2);
 		assertTrue(pronoms.files[0].matchCount() == 2);
 		assertTrue(pronoms.files[1].matchCount() == 1);
-		assertEquals("fmt/18", pronoms.files[0].get(0));
-		assertEquals("fmt/19", pronoms.files[0].get(1));
-		assertEquals("fmt/18", pronoms.files[1].get(0));
+		assertEquals("fmt/18", pronoms.files[0].getMatch(0).pronom());
+		assertEquals("fmt/19", pronoms.files[0].getMatch(1).pronom());
+		assertEquals("fmt/18", pronoms.files[1].getMatch(0).pronom());
 	
 	}
 
@@ -92,11 +92,11 @@ public class ExtractSiegfriedDataTest {
     	try
     	{
     	    Disk pronoms
-    	        = ExtractSiegfriedData.extractSiegfriedDataFromFile(path);
+    	        = ExtractSiegfriedData.extractSiegfriedDataFromFile(path, "");
     	    assertTrue(pronoms.files.length == 3);
-    	    assertEquals("fmt/18", pronoms.files[0].get(0));
-    	    assertEquals("fmt/18", pronoms.files[1].get(0));
-    	    assertEquals("fmt/18", pronoms.files[2].get(0));
+    	    assertEquals("fmt/18", pronoms.files[0].getMatch(0).pronom());
+    	    assertEquals("fmt/18", pronoms.files[1].getMatch(0).pronom());
+    	    assertEquals("fmt/18", pronoms.files[2].getMatch(0).pronom());
     	}
     	catch(java.nio.file.NoSuchFileException e)
     	{

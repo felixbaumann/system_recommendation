@@ -40,15 +40,15 @@ public class SystemRecommendationTest {
 		
 		String disk1 = directory + "siegfriedData\\\\39002105324017.ISO";
 		
-		String args6_1[] = {systems2, pronomStat, disk1, "0.4", "0.2", "0.4"};
-		String args6_2[] = {systems2, pronomStat, disk1, "1.0", "0.0", "0.0"};
+		String args6_1[] = {systems2, pronomStat, disk1, "0.7", "0.2", "0.1"};
+		String args6_2[] = {systems2, pronomStat, disk1, "0.9", "0.3", "0.2"};
 		String args3_1[] = {systems2, pronomStat, disk1};
 
 		SystemRecommendation.main(args6_1);	
-		assertEquals(4, SystemRecommendation.chosenSystem);
+		assertEquals(23, SystemRecommendation.chosenSystems[0]);
 		SystemRecommendation.main(args6_2);	
-		assertEquals(4, SystemRecommendation.chosenSystem);
+		assertEquals(28, SystemRecommendation.chosenSystems[0]);
 		SystemRecommendation.main(args3_1);
-	    assertEquals(4, SystemRecommendation.chosenSystem);
+	    assertEquals(33, SystemRecommendation.chosenSystems[0]);
 	}
 }

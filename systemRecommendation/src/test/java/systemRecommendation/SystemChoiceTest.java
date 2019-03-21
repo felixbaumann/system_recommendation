@@ -33,15 +33,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class SystemChoiceTest {
-	
+
 	public static void test()
 	{
 		/* Create some systems. */
-		
+
 		HashSet<String> programs0 = new HashSet<String>();	
 		/* Microsoft Word */
 		programs0.add("Q11261");
-		SystemImage system0 = new SystemImage(programs0);
+		SystemImage system0 = new SystemImage(programs0); /* id 4 */
 
 		HashSet<String> programs1 = new HashSet<String>();
 		/* Notepad */
@@ -50,8 +50,8 @@ public class SystemChoiceTest {
 		programs1.add("Q10393867");
 		/* IrfanView */
 		programs1.add("Q324957");
-		SystemImage system1 = new SystemImage(programs1);		
-		
+		SystemImage system1 = new SystemImage(programs1); /* id 5 */
+
 		HashSet<String> programs2 = new HashSet<String>();
 		/* Wordpad */
 		programs2.add("Q29482");
@@ -59,52 +59,56 @@ public class SystemChoiceTest {
 		programs2.add("Q274098");
 		/* IrfanView */
 		programs2.add("Q324957");
-		SystemImage system2 = new SystemImage(programs2);		
-		
+		SystemImage system2 = new SystemImage(programs2); /* id 6 */
+
 		HashSet<String> programs3 = new HashSet<String>();
-		SystemImage system3 = new SystemImage(programs3);
-		
+		SystemImage system3 = new SystemImage(programs3); /* id 7 */
+
 		ArrayList<SystemImage> systems = new ArrayList<SystemImage>();
 		systems.add(system0);
 		systems.add(system1);
 		systems.add(system2);
 		systems.add(system3);
-		
-		
+
+
 		/* Create disks with pronoms and their relevances. */
-		
+
 		HashMap<String, Double> disk1 = new HashMap<String, Double>();
-		
-		/* Since the disk is empty, recommend the default system. */
-		assertTrue(SystemChoice.chooseSystem(systems, disk1, 3) == 3);
-		
+
+		/* Since the disk is empty, don't recommend anything. */
+		SystemChoice sysChoice = new SystemChoice(systems, disk1);
+		assertTrue(sysChoice.bestSystem() == -1);
+
 		/* OpenDocument Text, version 1.1 (Q27203404) */
-		disk1.put("fmt/290", 4.0);
-		/* Recommend the system with Microsoft Word. */		
-		assertTrue(SystemChoice.chooseSystem(systems, disk1, 1) == 0);
-		
+		disk1.put("fmt/290", 0.04);
+		/* Recommend the system with Microsoft Word. */
+		sysChoice = new SystemChoice(systems, disk1);
+		assertTrue(sysChoice.bestSystem() == 4);
+
 		/* Portable Bitmap (Q28206679) */
-		disk1.put("fmt/409", 7.0);
-		/* Recommend a system with IrfanView, since the bitmap is more important. */
-		assertTrue(SystemChoice.chooseSystem(systems, disk1, 1) == 1 
-				|| SystemChoice.chooseSystem(systems, disk1, 1) == 2);
-		
+		disk1.put("fmt/409", 0.07);
+		/* Recommend a system with IrfanView, 
+		 * since the bitmap is more important. */
+		sysChoice = new SystemChoice(systems, disk1);
+		assertTrue(sysChoice.bestSystem() == 5
+			|| sysChoice.bestSystem() == 6);
+
 		/* Increase OpenDocument relevance. */
-		disk1.put("fmt/290", 8.0);
-		/* Recommend the system with Microsoft Word again. It's more important now. */		
-		assertTrue(SystemChoice.chooseSystem(systems, disk1, 1) == 0);
-		
+		disk1.put("fmt/290", 0.08);
+		/* Recommend the system with Microsoft Word again. It's more important now. */	
+		sysChoice = new SystemChoice(systems, disk1);
+		assertTrue(sysChoice.bestSystem() == 4);
+
 		/* Rich text format (Q29944786) */
-		disk1.put("fmt/355", 1.2);
+		disk1.put("fmt/355", 0.012);
 		/* Recommend the system which reads both the Bitmap as well as the rich text.
-		 * Together they're slightly more important. */		
-		assertTrue(SystemChoice.chooseSystem(systems, disk1, 1) == 2);
-		
-		
+		 * Together they're slightly more important. */
+		sysChoice = new SystemChoice(systems, disk1);
+		assertTrue(sysChoice.bestSystem() == 6);
+
 		ArrayList<SystemImage> emptySystem = new ArrayList<SystemImage>();
 		/* If there are no systems given, recommend -1. */
-		assertTrue(SystemChoice.chooseSystem(emptySystem, disk1, 1) == -1);
+		sysChoice = new SystemChoice(emptySystem, disk1);
+		assertTrue(sysChoice.bestSystem() == -1);
 	}
-	
-
 }

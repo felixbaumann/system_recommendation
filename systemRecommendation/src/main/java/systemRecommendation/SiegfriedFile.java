@@ -34,58 +34,118 @@ public class SiegfriedFile {
 	/* Simple file size. */
 	private final int size;
 	
-	/* Contains the pronoms of all possible matches of this file. */
-	private ArrayList<String> matches = new ArrayList<String>();
+	/* Contains the path to the file.
+	 * (Including the file itself) */
+	private String filePath;
 	
-	public SiegfriedFile(int fileSize)
+	private String filename;
+	
+	/* Contains the directory of the file (not including the file itself).
+	 * The path is split into folders and subfolders.
+	 * Note that some of the entries may be empty (""). 
+	 */
+	private String[] directory;
+	
+	/* Contains the pronoms of all possible matches of this file. */
+	private ArrayList<PronomMatch> matches = new ArrayList<PronomMatch>();
+	
+	public SiegfriedFile(int fileSize, String filepath)
 	{
 		size = (fileSize >= 0 ? fileSize : -1);
+		filePath = filepath;
+		extractDirectory(filepath);
 	}
 	
 	/* Constructor where some matches are already known. */
-	public SiegfriedFile(int fileSize, String pronomMatches[])
+	public SiegfriedFile(int fileSize, String filepath,
+		PronomMatch pronomMatches[])
 	{
 		size = (fileSize >= 0 ? fileSize : -1);
+		filePath = filepath;
+		extractDirectory(filepath);
+
 		if (pronomMatches == null) {return; }
-		for (int pronom = 0; pronom < pronomMatches.length; pronom++)
+		for (PronomMatch match : pronomMatches)
 		{
-			addMatch(pronomMatches[pronom]);
+			addMatch(match);
 		}
 	}
 	
 	/* Add a match to the list of matches for this file. */
-	public void addMatch(String match)
+	public void addMatch(PronomMatch match)
 	{
 		matches.add(match);
 	}
 	
 	/* Get the match of a given index. */
-	public String get(int index)
+	public PronomMatch getMatch(int index)
 	{
 		return matches.get(index);
 	}
 	
 	/* Get all the matches. */
-	public ArrayList<String> matches() 
-	{
-		return matches;
-	}
+	public ArrayList<PronomMatch> matches() { return matches; }
 	
 	/* Gets the current number of matches for this file. */
-	public int matchCount()
-	{
-		return matches.size();
-	}
+	public int matchCount() { return matches.size(); }
 	
 	/* Get the file size. */
-	public int fileSize()
-	{
-		return size;
-	}
+	public int fileSize() { return size; }
 
+	/* Get the directory (without the filename). */
+	public String[] getDirectory() { return directory; }
+	
+	/* Get the file path (with the filname). */
+	public String getFilePath() { return filePath; }
+	
+	public String getFilename() { return filename; }
+	
+	/* A given relevance value is shared accross all pronom matches. */
+	public void setRelevance(double relevance)
+	{
+		if (matches.size() == 0) { return; }
+
+		for (PronomMatch match : matches)
+		{
+			match.setRelevance(relevance / matches.size());
+		}
+	}
+	
 	/* If the file size is unknown, it will be set to -1. */
     public boolean validSize()
     {
     	return size != -1;
+    }
+
+    /* The filepath includes the filename itself.
+     * The directory is the same yet split into substrings
+     * and without the filename.
+     * 
+     * FILEPATH   The path to the file including its name.
+     * 
+     * RETURNS    The path to the folder containing the file.
+     *            The path (directory) is stored as a list of strings,
+     *            each representing a subfolder.
+     *            Note that the directory may contain empty strings ("").
+     */
+    private void extractDirectory(String filepath)
+    {
+    	if (filepath == null)
+    	{
+    		this.filename = "";
+    		this.directory = new String[] {};
+    		return;
+    	}
+
+    	/* Each slash indicates a subfolder. */
+    	String[] directory = filepath.split("/");
+    	
+    	/* The filename is the last substring of the filepath. */
+    	this.filename = directory[directory.length -1];
+
+    	/* Remove the filename from the directory. */
+    	directory[directory.length -1] = "";
+
+    	this.directory = directory;
     }
 }
