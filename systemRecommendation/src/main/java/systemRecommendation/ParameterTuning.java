@@ -47,6 +47,9 @@ public class ParameterTuning {
 
 		PronomStatistics pronomStats = SystemRecommendation.createPronomStats(
 				directory + "siegfriedData\\\\");
+		
+		SystemStatistics systemStats = SystemRecommendation.createSystemStats(
+			directory + "testSystems\\\\test02.txt");
 
 		ArrayList<Disk> disks = defineDisks();
 			
@@ -63,7 +66,7 @@ public class ParameterTuning {
 				                       {0.5, 0.4, 0.1},
 				                       {0.4, 0.5, 0.1},
 				                       {0.5, 0.5, 0.0}};
-		double bestOption[] = parameterTuning(pronomStats, disks,
+		double bestOption[] = parameterTuning(pronomStats, systemStats, disks,
 			parameterOptions);
 		System.out.println("The best parameter combination of the given "
 			+ "options is: " + bestOption[0] + ", " + bestOption[1] + ", "
@@ -84,7 +87,8 @@ public class ParameterTuning {
 	 * RETURNS  The best of the offered combinations of parameter values.
 	 */
 	private static double[] parameterTuning(PronomStatistics pronomStats,
-		ArrayList<Disk> disks, double[][] options) throws IOException
+		SystemStatistics systemStats, ArrayList<Disk> disks,
+		double[][] options) throws IOException
 	{
 		/* Index of the best option found yet in the options array. */
 		int bestOption = 0;
@@ -94,8 +98,8 @@ public class ParameterTuning {
 		/* Try each parameter combination option. */
 		for (int option = 0; option < options.length; option++)
 		{
-			int optionScore = calculateOptionScore(pronomStats, disks,
-				options[option]);
+			int optionScore = calculateOptionScore(pronomStats, systemStats,
+				disks, options[option]);
 			
 			/* Check whether the current parameter combination
 			 * is the best one so far. */
@@ -106,7 +110,8 @@ public class ParameterTuning {
 			}
 		}
 		return new double[] {options[bestOption][0], options[bestOption][1],
-			options[bestOption][2], (double) bestOptionsScore, (double) disks.size()};
+			options[bestOption][2], (double) bestOptionsScore,
+			(double) disks.size()};
 	}
 	
 	/* This function calculates the score for a given parameter set.
@@ -125,15 +130,15 @@ public class ParameterTuning {
 	 * is a perfect one.
 	 */
 	private static int calculateOptionScore(PronomStatistics pronomStats,
-		ArrayList<Disk> disks, double[] option)
+		SystemStatistics systemStats, ArrayList<Disk> disks, double[] option)
 	{
 		int score = 0;
 		/* Calculate the relevance of each disk with this parameter option. */
 		for (Disk disk : disks)
 		{
 			HashMap<String, Double> relevances
-			    = PronomRelevance.relativePronomRelevances(
-			    	disk, pronomStats, option[0],
+			    = PronomRelevance.pronomRelevances(
+			    	disk, pronomStats, systemStats, option[0],
 			    	option[1], option[2]);
 			/* If the pronom with the largest relevance is the correct one,
 			 * increment the score of this option. */

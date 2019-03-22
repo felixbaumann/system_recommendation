@@ -41,96 +41,6 @@ import java.util.Iterator;
  */
 public class PronomRelevance
 {
-	/* This function implements an alternative relevance metric
-	 * than pronomRelevances().
-	 * 
-	 * FILES     A list of SiegfriedFiles representing a whole disk of files.
-	 *           The relevance of the pronoms of these files will be
-	 *           evaluated.
-	 * 
-	 * PRONOMSTATS Statistics on the relative frequency of pronoms based on
-	 *             a (hopefully) large dataset. Do NOT only use the files
-	 *             above.
-	 *
-	 * DUPLICATEPARAMETER	Defines the influence of duplicates on
-	 *						the relevance. 
-	 * 
-	 * SIZEPARAMETER		Defines the influence of filesizes on
-	 * 						the relevance.
-	 * 
-	 * FREQUENCYPARAMETER	Defines the influence of statistical pronom
-	 * 						frequencies on the relevance.
-	 * 
-	 *  Use positive values for all parameters. The use of 0 is valid and will
-	 *  result in no influence of the parameter.
-	 * 
-	 * RETURN    A HashMap mapping from pronoms occuring in the files
-	 *           to a relevance value for each of them.
-	 */
-	public static HashMap<String, Double> relativePronomRelevances(
-	    Disk disk, PronomStatistics pronomStats,
-	    double duplicateParameter, double sizeParameter,
-	    double frequencyParameter)
-	{
-		int fileNumber = disk.files.length;
-		int diskSize = 0;
-
-		HashMap<String, Double> relevances = initializeRelevanceMap(disk);
-		
-		/* Counts how often each format occurs in 'files'. */
-		HashMap<String, Integer> formatInstances
-		    = initializeFormatInstancesMap(disk);
-		
-		/* Counts the size of all instances of a format in 'files'. */
-		HashMap<String, Integer> formatSizes
-		    = initializeFormatInstancesMap(disk);
-
-		/* Compute the number of instances of all pronoms
-		 * and the sizes of their files. */
-		for (SiegfriedFile file : disk.files)
-		{
-			diskSize += file.fileSize();
-
-			for (PronomMatch match : file.matches())
-			{
-				String pronom = match.pronom();
-				formatInstances.put(pronom,
-					formatInstances.get(pronom) + 1 / file.matchCount());
-				formatSizes.put(pronom,
-					formatSizes.get(pronom)
-					    + file.fileSize() / file.matchCount());
-			}
-		}
-
-		/* Compute the sum of the relative frequencies of all occuring pronoms
-		 * on the disk. */
-		double sumOfRelativeFrequencies = 0.0;
-		for(String pronom : relevances.keySet())
-		{
-			sumOfRelativeFrequencies
-			    += pronomStats.getRelativeFrequency(pronom);
-		}
-
-		/* Combine the relevance factors. */
-		Iterator<String> iter = relevances.keySet().iterator();
-		while (iter.hasNext())
-		{
-			String pronom = iter.next();
-			double relevance = 0;
-			relevance += duplicateParameter
-				* ((double) formatInstances.get(pronom)) / fileNumber;
-			relevance += sizeParameter * formatSizes.get(pronom) / diskSize;
-
-			if (sumOfRelativeFrequencies > 0)
-			{
-				relevance += frequencyParameter
-					* (1 - pronomStats.getRelativeFrequency(pronom)
-						/ sumOfRelativeFrequencies);
-			}
-			relevances.put(pronom, relevance);	
-		}
-		return relevances;
-	}
 
 	/* This function implements the current relevance metric.
 	 * 
@@ -257,6 +167,8 @@ public class PronomRelevance
 	private static void normalizeRelevances(
 		HashMap<String, Double> relevances)
 	{
+		if (relevances.size() == 0) { return; }
+
 		/* 1. Find the largest relevance value. */
 		Double max = Collections.max(relevances.values());
 		
@@ -351,26 +263,6 @@ public class PronomRelevance
 			for (PronomMatch match : file.matches())
 			{
 				emptyRelevances.put(match.pronom(), 0.0);
-			}
-		}
-		return emptyRelevances;
-	}
-	
-	/* This function creates a Map containing a key for every pronom
-	 * occuring in the Siegfried files.
-	 * Default value is 0.
-	 */
-	private static HashMap<String, Integer> initializeFormatInstancesMap(
-	    Disk disk)
-	{
-		HashMap<String, Integer> emptyRelevances
-		    = new HashMap<String, Integer>();
-
-		for (SiegfriedFile file : disk.files)
-		{
-			for (PronomMatch match : file.matches())
-			{
-				emptyRelevances.put(match.pronom(), 0);
 			}
 		}
 		return emptyRelevances;

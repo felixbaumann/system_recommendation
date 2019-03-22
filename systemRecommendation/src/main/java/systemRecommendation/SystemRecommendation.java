@@ -131,7 +131,7 @@ public class SystemRecommendation
 	/* This function creates system statistics from a given file containing
 	 * system representations.
 	 */
-	private static SystemStatistics createSystemStats(String path)
+	public static SystemStatistics createSystemStats(String path)
 		throws IOException
 	{
 		SystemStatistics systemStats;
