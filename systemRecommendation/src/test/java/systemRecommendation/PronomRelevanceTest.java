@@ -201,195 +201,195 @@ public class PronomRelevanceTest {
         /* Use disk 1-16 for statistics 1-5 */
         System.out.println("\nDisk 1, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk1, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk1, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk1, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk1, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk1, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk1, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk1, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk1, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk1, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk1, stats5, sysStats11, 0.33333));
 
         System.out.println("\nDisk 2, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk2, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk2, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk2, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk2, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk2, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk2, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk2, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk2, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk2, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk2, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 3, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk3, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk3, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk3, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk3, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk3, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk3, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk3, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk3, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk3, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk3, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 4, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk4, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk4, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk4, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk4, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk4, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk4, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk4, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk4, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk4, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk4, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 5, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk5, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk5, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk5, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk5, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk5, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk5, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk5, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk5, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk5, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk5, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 6, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk6, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk6, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk6, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk6, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk6, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk6, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk6, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk6, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk6, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk6, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 7, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk7, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk7, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk7, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk7, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk7, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk7, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk7, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk7, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk7, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk7, stats5, sysStats11, 0.33333));
 
         System.out.println("\nDisk 8, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk8, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk8, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk8, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk8, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk8, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk8, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk8, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk8, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk8, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk8, stats5, sysStats11, 0.33333));
 
         System.out.println("\nDisk 9, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk9, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk9, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk9, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk9, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk9, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk9, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk9, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk9, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk9, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk9, stats5, sysStats11, 0.33333));
 
         System.out.println("\nDisk 10, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk10, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk10, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk10, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk10, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk10, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk10, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk10, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk10, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk10, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk10, stats5, sysStats11, 0.33333));
 
         System.out.println("\nDisk 11, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk11, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk11, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk11, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk11, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk11, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk11, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk11, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk11, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk11, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk11, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 12, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk12, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk12, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk12, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk12, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk12, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk12, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk12, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk12, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk12, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk12, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 13, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk13, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk13, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk13, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk13, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk13, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk13, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk13, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk13, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk13, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk13, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 14, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk14, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk14, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk14, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk14, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk14, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk14, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk14, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk14, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk14, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk14, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 15, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk15, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk15, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk15, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk15, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk15, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk15, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk15, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk15, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk15, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk15, stats5, sysStats11, 0.33333));
         
         System.out.println("\nDisk 16, stats 1-5\n");
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk16, stats1, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk16, stats1, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk16, stats2, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk16, stats2, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk16, stats3, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk16, stats3, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk16, stats4, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk16, stats4, sysStats11, 0.33333));
         printRelevances(PronomRelevance.pronomRelevances(
-        		disk16, stats5, sysStats11, 0.33333, 0.33333, 0.33333));
+        		disk16, stats5, sysStats11, 0.33333));
 	}
 
 

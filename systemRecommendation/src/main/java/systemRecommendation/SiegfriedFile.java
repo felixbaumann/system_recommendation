@@ -34,6 +34,9 @@ public class SiegfriedFile {
 	/* Simple file size. */
 	private final int size;
 	
+	/* Size penalized by the depth in the file system. */
+	private int penalizedSize;
+	
 	/* Contains the path to the file.
 	 * (Including the file itself) */
 	private String filePath;
@@ -92,6 +95,13 @@ public class SiegfriedFile {
 	/* Get the file size. */
 	public int fileSize() { return size; }
 
+	public int getPenalizedSize() { return penalizedSize; }
+	
+	public void setPenalizedSize(int penalizedSize)
+	{
+		this.penalizedSize = penalizedSize;
+	}
+	
 	/* Get the directory (without the filename). */
 	public String[] getDirectory() { return directory; }
 	

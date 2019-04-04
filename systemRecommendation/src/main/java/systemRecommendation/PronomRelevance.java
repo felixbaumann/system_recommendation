@@ -26,7 +26,6 @@
 
 package systemRecommendation;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -53,27 +52,18 @@ public class PronomRelevance
 	 * SYSTEMSTATS Statistics on the rarity of the ability to read certain
 	 *             pronoms, based on the available systems.
 	 *             
-	 * DEPTHPAR	        Defines the influence the depth of a path has
-	 * 					on the relevance of a file. 
-	 * 					(Large value is a small influence.)
-	 * 
-	 * PRONOMFREQPAR	Defines the influence of statistical pronom
-	 * 					frequencies on the relevance.
-	 * 					(Large value is a large influence.)
-	 * 
-	 * SYSTEMFREQPAR	Defines the influence of statistical system
-	 * 					frequencies on the relevance.
-	 * 					(Large value is a large influence.)
-	 * */
+	 * DEPTHPAR	   Defines the influence the depth of a path has
+	 * 			   on the relevance of a file. 
+	 * 			   (Large value is a small influence.)
+	 */
 	public static HashMap<String, Double> pronomRelevances(
 		    Disk disk, PronomStatistics pronomStats,
 		    SystemStatistics systemStats,
-		    double depthPar, double pronomFreqPar,
-		    double systemFreqPar)
+		    double depthPar)
 	{
 		/* Start with a relevance value of 100% for the entire disk
 		 * and share this relevance between all matches of all files. */
-		fileRelevance(disk.disk, 1.0, depthPar);
+		fileRelevance(disk, 1.0, depthPar);
 
 		HashMap<String, Double> relevances = sumMatchRelevances(disk);
 		
@@ -81,11 +71,11 @@ public class PronomRelevance
 		normalizeRelevances(relevances);
 		
 		/* Add a relevance value for the rarity of the pronoms. */
-		addPronomRarity(relevances, pronomStats, pronomFreqPar);
+		addPronomRarity(relevances, pronomStats);
 		
 		/* Add a relevance value for the rarity of systems being able to read
 		 * the pronom. */
-		addSystemRarity(relevances, systemStats, systemFreqPar);		
+		addSystemRarity(relevances, systemStats);		
 		
 		/* Normalize again. Yes, twice is necessary. */
 		normalizeRelevances(relevances);
@@ -103,7 +93,7 @@ public class PronomRelevance
 	 * The largest bonus is given to pronoms that appear only once in
 	 * the dataset. */
 	private static void addPronomRarity(HashMap<String, Double> relevances,
-		PronomStatistics pronomStats, double pronomFreqPar)
+		PronomStatistics pronomStats)
 	{
 		/* Iterate over all pronoms and calculate their rarity bonus. */
 		Iterator<String> iter = relevances.keySet().iterator();
@@ -116,14 +106,16 @@ public class PronomRelevance
 			
 			/* Since relevance drops with a higher frequency, we use
 			 * (1 - frequency). */
-			Double rarityBonus = pronomFreqPar
-				* (1 - pronomStats.getRelativeFrequency(pronom));
-
+			Double rarityBonus = 1 - pronomStats.getRelativeFrequency(pronom);
+			
+			/* If the relative frequency is 1 since all files have the same format,
+			 * dont' add a rarity bonus, since it would yield a product of 0.*/
+			if (rarityBonus < 0.00000000000001) { continue; }
 			/* If there is any information about the pronom rarity,
 			 * add a relevance bonus.
 			 * The rarer the pronom, the larger the bonus. */
 			relevances.put(pronom,
-				oldRelevance + rarityBonus);
+				oldRelevance * rarityBonus);
 		}
 	}
 	
@@ -137,8 +129,12 @@ public class PronomRelevance
 	 * The largest bonus is given to pronoms that can only be read by one
 	 * single system. */
 	private static void addSystemRarity(HashMap<String, Double> relevances,
-		SystemStatistics systemStats, double systemFreqPar)
+		SystemStatistics systemStats)
 	{
+		/* If there aren't any systems at all, don't ruin the relevance
+		 * computations. */
+		if (systemStats.systems.size() == 0) { return; }
+		
 		/* Iterate over all pronoms and calculate their rarity bonus. */
 		Iterator<String> iter = relevances.keySet().iterator();
 		while (iter.hasNext())
@@ -149,38 +145,54 @@ public class PronomRelevance
 			Double oldRelevance = relevances.get(pronom);
 			
 			/* The number of systems able to read the pronom. */
-			Integer systems = systemStats.readingSystems.get(pronom);
+			Integer readSystems = systemStats.readingSystems.get(pronom);
 			
-			if (systems == null) { continue; }
-			if (systems <= 0) { continue; }
+			if (readSystems == null) { continue; }
+			if (readSystems <= 0) { continue; }
 			
 			/* If there is any information about the system rarity,
 			 * add a relevance bonus.
 			 * The rarer the systems, the larger the bonus. */
 			relevances.put(pronom,
-				oldRelevance + (1.0 / (double) systems) * systemFreqPar);
+				oldRelevance * (readSystems / (double) systemStats.systems.size()));
 		}
 	}
 	
 	/* This function accepts a hashmap of relevance values for pronoms
-	 * and normalizes these relevances by projecting them on [0, 1]. */
+	 * and normalizes these relevances by projecting to values
+	 * between 0 and 1. */
 	private static void normalizeRelevances(
 		HashMap<String, Double> relevances)
 	{
 		if (relevances.size() == 0) { return; }
 
-		/* 1. Find the largest relevance value. */
-		Double max = Collections.max(relevances.values());
+		/* 1. Sum up the relevance values. */
+		Double sum = 0.0;
 		
-		if (max <= 0 || max == null) { return; }
+		for (String pronom : relevances.keySet())
+		{
+			if (pronom == null) { continue; }
+			if (pronom.equals("UNKNOWN")) { continue; }
+
+			Double value = relevances.get(pronom);
+
+			sum += (value == null ? 0.0 : value);
+		}
+
+		if (sum < 0.0000000001) { return; }
 		
 		/* 2. Perform the projections. */
 		Iterator<String> iter = relevances.keySet().iterator();
 		while (iter.hasNext())
 		{
 			String pronom = iter.next();
+			if (pronom.equals("UNKNOWN"))
+			{
+				relevances.put(pronom, 0.0);
+				continue;
+			}
 			Double oldRelevance = relevances.get(pronom);
-			relevances.put(pronom, oldRelevance == null ? null : oldRelevance / max);
+			relevances.put(pronom, oldRelevance == null ? null : oldRelevance / sum);
 		}
 	}
 	
@@ -207,45 +219,50 @@ public class PronomRelevance
 		return relevances;
 	}
 	
-	/*
-	 * RELEVANCE  The relevance value that shall be shared between the files and the subfolders.
+	/* This function calculates the relevance values of each file according
+	 * to its size and penalized by its depth in the file system.
+	 * 
+	 * DISK		  The disk whose files' relevances shall be calculated.
+	 * 
+	 * RELEVANCE  The relevance value that shall be shared between the files.
+	 * 
+	 * DEPTHPENALTY Choose a value between 0 and 1.
+	 *              1 means no effect of the depth.
+	 *              0 means files in subfolders have no value at all.
+	 *              Everything in between penalizes files in sub-subfolders
+	 *              more than files in regular subfolders.
 	 */
-	private static void fileRelevance(Folder folder, double relevance,
+	private static void fileRelevance(Disk disk, double relevance,
 		double depthPenalty)
 	{
-		double folderSize = getFolderSize(folder, depthPenalty);
-		
-		/* Each file gets a relevance according to its share
-		 * of the folder size. */
-		for (SiegfriedFile file : folder.files())
+		/* Calculate penalized size of each file according to its depth
+		 * in the file system. */
+		double sumOfPenalizedSizes = 0;
+		for (SiegfriedFile file : disk.files)
 		{
-			file.setRelevance(relevance * (file.fileSize() / folderSize));
+			/* First, reduce the influence of file sizes by rooting them. */
+			int size = (int) Math.sqrt(file.fileSize());
+
+			/* For each subfolder, penalize the size even more. */
+			for (int i = 0; i < file.getDirectory().length; i++)
+			{
+				size *= depthPenalty;
+			}
+			file.setPenalizedSize(size);
+			sumOfPenalizedSizes += size;
 		}
-		
-		/* Each subfolder gets a relevance according to its share
-		 * of the folder size recursively. */
-		for (Folder subfolder : folder.folders().values())
+
+		/* Calculate the relevance of each file according to its size
+		 * penalized by the depth in the file system. */
+		for (SiegfriedFile file : disk.files)
 		{
-			fileRelevance(subfolder, relevance * (subfolder.size(depthPenalty)
-				/ folderSize), depthPenalty);
+			double sizeShare
+			    = ((double) file.getPenalizedSize()) / sumOfPenalizedSizes;
+
+			double rel = sizeShare / relevance;
+
+			file.setRelevance(rel);
 		}
-	}
-	
-	/* This function returns the size of the given folder as the sum of all
-	 * its subfolders and files. */
-	private static double getFolderSize(Folder folder, double depthPenalty)
-	{
-		double size = 0;
-		for (Folder subfolder : folder.folders().values())
-		{
-			size += subfolder.size(depthPenalty);
-		}
-		for (SiegfriedFile file : folder.files())
-		{
-			size += file.fileSize();
-		}
-		return size;
-		
 	}
 	
 	/* This function creates a Map containing a key for every pronom

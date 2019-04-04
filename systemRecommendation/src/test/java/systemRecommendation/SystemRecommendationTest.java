@@ -27,6 +27,7 @@
 package systemRecommendation;
 
 import java.io.IOException;
+import org.junit.Test;
 
 public class SystemRecommendationTest {
 	
@@ -38,8 +39,8 @@ public class SystemRecommendationTest {
 		
 		String disk1 = directory + "siegfriedData\\\\39002105324017.ISO";
 		
-		String args6_1[] = {systems2, pronomStat, disk1, "0.7", "0.2", "0.1"};
-		String args6_2[] = {systems2, pronomStat, disk1, "0.9", "0.3", "0.2"};
+		String args6_1[] = {systems2, pronomStat, disk1, "0.7"};
+		String args6_2[] = {systems2, pronomStat, disk1, "0.9"};
 		String args3_1[] = {systems2, pronomStat, disk1};
 
 		SystemRecommendation.main(args6_1);	
@@ -51,5 +52,34 @@ public class SystemRecommendationTest {
 		SystemRecommendation.main(args3_1);
 		assert(34 == SystemRecommendation.chosenSystems[0]
 			|| 35 == SystemRecommendation.chosenSystems[0]);
+	}
+	
+	@Test
+	public void main() throws IOException
+	{
+		String directory = "D:\\\\Bibliotheken\\\\Studium\\\\Bachelorarbeit\\\\testData\\\\";
+
+		String systems = directory + "testSystems\\\\thesis_archive.txt";
+		
+		String pronomStat = directory + "siegfriedData\\\\";
+		
+		String disk = directory + "siegfriedData\\\\39002105324017.ISO";
+
+		String args[] = {systems, pronomStat, disk};
+
+		SystemRecommendation.main(args);
+		assert(2 == SystemRecommendation.chosenSystems[0] ||
+			   3 == SystemRecommendation.chosenSystems[0]  ||
+			   5 == SystemRecommendation.chosenSystems[0] ||
+		       6 == SystemRecommendation.chosenSystems[0]);
+		
+		String disk2 = directory + "siegfriedData\\\\39002123858236.ISO";
+
+		String args2[] = {systems, pronomStat, disk2};
+		
+		/* The archive contains 7 systems. With each execution the system counter increases by 7. */
+		SystemRecommendation.main(args2);
+		assert(2 + 7 == SystemRecommendation.chosenSystems[0] ||
+			   6 + 7 == SystemRecommendation.chosenSystems[0]);		
 	}
 }

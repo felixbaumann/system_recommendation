@@ -54,24 +54,13 @@ public class ParameterTuning {
 		ArrayList<Disk> disks = defineDisks();
 			
 		// TODO add more parameter options
-		double parameterOptions[][] = {{0.333, 0.333, 0.333}, 
-				                       {0.4, 0.4, 0.2},
-				                       {0.4, 0.2, 0.4},
-				                       {0.2, 0.4, 0.4},
-				                       {0.8, 0.1, 0.1},
-				                       {0.1, 0.8, 0.1},
-				                       {0.1, 0.1, 0.8},
-				                       {0.41, 0.41, 0.18},
-				                       {0.45, 0.45, 0.1},
-				                       {0.5, 0.4, 0.1},
-				                       {0.4, 0.5, 0.1},
-				                       {0.5, 0.5, 0.0}};
+		double parameterOptions[] = {0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9}; 
+
 		double bestOption[] = parameterTuning(pronomStats, systemStats, disks,
 			parameterOptions);
-		System.out.println("The best parameter combination of the given "
-			+ "options is: " + bestOption[0] + ", " + bestOption[1] + ", "
-			+ bestOption[2] + "\nThe achieved score is " + bestOption[3]
-			+ "/" + bestOption[4]);
+		System.out.println("The best parameter of the given "
+			+ "options is: " + bestOption[0] + "\nThe achieved score is " + bestOption[1]
+			+ "/" + bestOption[2]);
 	}
 	
 	
@@ -88,7 +77,7 @@ public class ParameterTuning {
 	 */
 	private static double[] parameterTuning(PronomStatistics pronomStats,
 		SystemStatistics systemStats, ArrayList<Disk> disks,
-		double[][] options) throws IOException
+		double[] options) throws IOException
 	{
 		/* Index of the best option found yet in the options array. */
 		int bestOption = 0;
@@ -109,8 +98,7 @@ public class ParameterTuning {
 				bestOption = option;
 			}
 		}
-		return new double[] {options[bestOption][0], options[bestOption][1],
-			options[bestOption][2], (double) bestOptionsScore,
+		return new double[] {options[bestOption], (double) bestOptionsScore,
 			(double) disks.size()};
 	}
 	
@@ -130,7 +118,7 @@ public class ParameterTuning {
 	 * is a perfect one.
 	 */
 	private static int calculateOptionScore(PronomStatistics pronomStats,
-		SystemStatistics systemStats, ArrayList<Disk> disks, double[] option)
+		SystemStatistics systemStats, ArrayList<Disk> disks, double option)
 	{
 		int score = 0;
 		/* Calculate the relevance of each disk with this parameter option. */
@@ -138,8 +126,7 @@ public class ParameterTuning {
 		{
 			HashMap<String, Double> relevances
 			    = PronomRelevance.pronomRelevances(
-			    	disk, pronomStats, systemStats, option[0],
-			    	option[1], option[2]);
+			    	disk, pronomStats, systemStats, option);
 			/* If the pronom with the largest relevance is the correct one,
 			 * increment the score of this option. */
 			if(validRelevances(relevances, disk)) { score++; }

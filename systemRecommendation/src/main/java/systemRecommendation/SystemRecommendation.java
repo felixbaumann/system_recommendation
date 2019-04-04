@@ -62,14 +62,7 @@ public class SystemRecommendation
 	 * 
 	 * OPTIONAL:
 	 * ARGS[3]			Parameter for the influence of path depth of files on
-	 * 					the relevance formular. Default is 0.8.
-	 * 
-	 * ARGS[4]			Parameter for the influence of statistical pronom 
-	 *                  frequencies on the relevance formular. Default is 0.2.
-	 * 
-	 * ARGS[5]			Parameter for the influence of statistical system
-	 *					frequencies on the relevance formular.
-	 *					Default is 0.2.
+	 * 					the relevance formular. Default is 0.4.
 	 *
 	 * RETURN			Prints the number of the recommended system to
 	 * 					standard output. The number corresponds to the line
@@ -88,19 +81,15 @@ public class SystemRecommendation
 		 * for which a system shall be recommended. */
 		String siegfriedOutputForDisk = args[2];
 		
-		/* Default values for the parameters weighting
-		 * the relevance influencers. */
-		double depthParam = 0.8;
-		double pronomFrequencyParam = 0.2;
-		double systemFrequencyParam = 0.2;
+		/* Default values for the parameter weighting
+		 * the depth influence. */
+		double depthParam = 0.4;
 
 		/* If values for those parameters are given,
 		 * obviously use the given ones instead. */
-		if (args.length == 6)
+		if (args.length == 4)
 		{
 			depthParam = Double.parseDouble(args[3]);
-			pronomFrequencyParam = Double.parseDouble(args[4]);
-			systemFrequencyParam = Double.parseDouble(args[5]);
 		}
 
 		SystemStatistics systemStats = createSystemStats(systemsFile);
@@ -114,8 +103,7 @@ public class SystemRecommendation
 		/* Calculate the relevance of each pronom occuring on the disk. */
 		HashMap<String, Double> relevances
 		    = PronomRelevance.pronomRelevances(
-		    	disk, pronomStats, systemStats, depthParam,
-		    	pronomFrequencyParam, systemFrequencyParam);
+		    	disk, pronomStats, systemStats, depthParam);
 
 		/* Recommend a system maximizing the relevance. */
 		SystemChoice sysChoice
